@@ -3,4 +3,4 @@ version: 0.0.1
 description: 'Allows players to bind Lua scripts to blocks'
 authors: [zonedabone, CJxD]
 
-main: com.zone.commandit.CommandIt
+main: org.zone.commandit.CommandIt

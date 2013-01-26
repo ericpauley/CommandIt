@@ -1,4 +1,4 @@
-package com.zone.commandit;
+package org.zone.commandit;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
