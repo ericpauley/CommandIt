@@ -4,11 +4,16 @@
             A Bukkit Plugin which allows Lua code to be bound to blocks
     </description>
 
-	<!-- set global properties for this build -->
-	<property name="src" location="src" />
-	<property name="bin" location="bin" />
-	<property name="lib" location="lib" />
+	<!--Load properties -->
+	<property file="build.properties" />
+
+	<!-- Determine build number -->
 	<property environment="env" />
+	<condition property="build" value="${env.BUILD_NUMBER}">
+			<isset property="env.BUILD_NUMBER" />
+	</condition>
+	<property name="build" value="DEV" />
+
 	<target name="init" depends="clean" description="create necessary folders">
 		<mkdir dir="${bin}" />
 	</target>
@@ -23,8 +28,9 @@
 		<antcall target="dist" />
 	</target>
 	<target name="dist" description="generate the distribution">
+		<copy file="${src}/plugin.yml" todir="${bin}" />
+		<replace file="${bin}/plugin.yml" token="___VERSION___" value="${version}-${build}" />
 		<jar jarfile="${bin}/CommandIt.jar" basedir="${bin}" encoding="Cp1252">
-			<zipfileset dir="." includes="*.yml" />
 			<zipfileset dir="." includes="*.lbc" />
 			<zipfileset dir="." includes="LICENSE.txt" />
 			<zipgroupfileset dir="${lib}" includes="export/*" />

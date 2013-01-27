@@ -1,5 +1,5 @@
 name: CommandIt
-version: 0.0.1
+version: ___VERSION___
 description: 'Allows players to bind Lua scripts to blocks'
 authors: [zonedabone, CJxD]
 
