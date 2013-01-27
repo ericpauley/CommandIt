@@ -30,4 +30,8 @@ public class IntegrationServer {
         return LuaUtil.expose(players);
     }
     
+    public KahluaTable getPlayer(String name){
+        return LuaUtil.expose(s.getPlayer(name));
+    }
+    
 }
