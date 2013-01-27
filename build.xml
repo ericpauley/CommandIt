@@ -8,6 +8,7 @@
 	<property name="src" location="src" />
 	<property name="bin" location="bin" />
 	<property name="lib" location="lib" />
+	<property environment="env" />
 	<target name="init" depends="clean" description="create necessary folders">
 		<mkdir dir="${bin}" />
 	</target>
@@ -22,6 +23,7 @@
 		<antcall target="dist" />
 	</target>
 	<target name="dist" description="generate the distribution">
+		<echo file="${bin}/version.yml" append="false">build: ${env.BUILD_NUMBER}</echo>
 		<jar jarfile="${bin}/CommandIt.jar" basedir="${bin}" encoding="Cp1252">
 			<zipfileset dir="." includes="*.yml" />
 			<zipfileset dir="." includes="*.lbc" />
