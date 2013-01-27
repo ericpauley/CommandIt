@@ -55,10 +55,25 @@ public class CommandIt extends JavaPlugin {
 					super.getFile().getName());
 		}
 
+		/**
+		 * Complements Vault to finding whether a player has a given permission string
+		 * 
+		 * @param player
+		 * @param string Permission node in dotted format
+		 * @return
+		 */
 		public boolean hasPermission(CommandSender player, String string) {
 			return hasPermission(player, string, true);
 		}
 
+		/**
+		 * Complements Vault to finding whether a player has a given permission string
+		 * 
+		 * @param player
+		 * @param string Permission node in dotted format
+		 * @param notify True if nag message should be sent on failure
+		 * @return
+		 */
 		public boolean hasPermission(CommandSender player, String string,
 				boolean notify) {
 			boolean perm;
@@ -73,6 +88,9 @@ public class CommandIt extends JavaPlugin {
 			return perm;
 		}
 
+		/**
+		 * Load all required data for the plugin
+		 */
 		public void load() {
 			config.load();
 			messenger.load();
@@ -104,58 +122,94 @@ public class CommandIt extends JavaPlugin {
 			pm.registerEvents(listener, this);
 		}
 
+		/**
+		 * Find the resident economy system and set up Vault to use it.
+		 * @return True if successful
+		 */
 		public boolean setupEconomy() {
 			RegisteredServiceProvider<Economy> economyProvider = getServer()
-					.getServicesManager().getRegistration(
-							net.milkbowl.vault.economy.Economy.class);
+					.getServicesManager().getRegistration(Economy.class);
 			if (economyProvider != null) {
 				economy = economyProvider.getProvider();
 			}
 			return economy != null;
 		}
 
+		/**
+		 * Find the resident permission system and set up Vault to use it.
+		 * @return True if successful
+		 */
 		public boolean setupPermissions() {
 			RegisteredServiceProvider<Permission> permissionProvider = getServer()
-					.getServicesManager().getRegistration(
-							net.milkbowl.vault.permission.Permission.class);
+					.getServicesManager().getRegistration(Permission.class);
 			if (permissionProvider != null) {
 				permission = permissionProvider.getProvider();
 			}
 			return permission != null;
 		}
 
+		/**
+		 * Schedules updates to be checked daily
+		 */
 		public void startUpdateCheck() {
 			Runnable checker = getUpdater().new Checker();
 			updateTask = getServer().getScheduler().runTaskTimer(this, checker, 0,
 					1728000L);
 		}
 		
+		/**
+		 * @return Plugin's configuration and settings handler
+		 */
 		public Config getPluginConfig() {
 			return config;
 		}
+		/**
+		 * @return Handler for loading code block data
+		 */
 		public CodeLoader getCodeLoader() {
 			return loader;
 		}
+		/**
+		 * @return Handler for sending messages and statuses to players
+		 */
 		public Messages getMessenger() {
 			return messenger;
 		}
+		/**
+		 * @return Handler for the updater system
+		 */
 		public Updater getUpdater() {
 			return updater;
 		}
 		
+		/**
+		 * @return All loaded code blocks on the server
+		 */
 		public Map<Location, LuaCode> getCodeBlocks() {
 			return cache;
 		}
+		/**
+		 * @return The states of all players on the server
+		 */
 		public Map<OfflinePlayer, PlayerState> getPlayerStates() {
 			return playerStates;
 		}
+		/**
+		 * @return The clipboards of all players on the server
+		 */
 		public Map<OfflinePlayer, LuaCode> getPlayerCode() {
 			return playerCode;
 		}
 		
+		/**
+		 * @return Vault's economy handler
+		 */
 		public Economy getEconomy() {
 			return economy;
 		}
+		/**
+		 * @return Vault's permission handler
+		 */
 		public Permission getPermissionHandler() {
 			return permission;
 		}
