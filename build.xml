@@ -14,7 +14,9 @@
 	<target name="build" depends="init" description="compile the source">
 		<javac srcdir="${src}" destdir="${bin}" debug="on" debuglevel="lines,vars,source" includeantruntime="false" encoding="Cp1252">
 			<classpath>
-				<fileset dir="${lib}" includes="*.jar"/>
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
 			</classpath>
 		</javac>
 		<antcall target="dist" />
