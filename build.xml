@@ -23,8 +23,6 @@
 		<antcall target="dist" />
 	</target>
 	<target name="dist" description="generate the distribution">
-		<echo file="${bin}/version.yml" append="false">build: ${env.BUILD_NUMBER}</echo>
-		<replace file="${bin}/version.yml" token="$${env.BUILD_NUMBER}" value="DEV"/>
 		<jar jarfile="${bin}/CommandIt.jar" basedir="${bin}" encoding="Cp1252">
 			<zipfileset dir="." includes="*.yml" />
 			<zipfileset dir="." includes="*.lbc" />
