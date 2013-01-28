@@ -29,5 +29,5 @@ p = requests.get(r.headers['location']).text
 m = re.search('"http://dev.bukkit.org/media/files/(.*/.*/.*)"', p)
 url = m.group(1)
 f = open("version.txt", 'w');
-f.write('version:' + data['name']+"\ndownload: "+url)
+f.write('version: ' + data['name']+"\ndownload: "+url)
 f.close();
