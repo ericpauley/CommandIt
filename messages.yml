@@ -1,0 +1,67 @@
+config-version: 2.4
+prefix: "&4[CommandIt]&f "
+
+success:
+  cleared: "Code clipboard and status cleared."
+  copied: "Code added to clipboard. Click a block to enable."
+  line_print: "{NUMBER}&4: &f{LINE}"
+  saved: "Saved command blocks to file."
+  reloaded: "Reload complete."
+  done_editing: "Finished editing sign."
+  enabled: "Command block enabled."
+  disabled: "Command block disabled."
+  removed: "Command block removed."
+    
+information:
+  text_in_clipboard: "You still have code in your clipboard."
+    
+progress:
+  remove: "Select a command block to remove."
+  copy: "Select a command block to copy."
+  read: "Select a command block to read."
+  toggle: "Select a command block to enable or disable it."
+  add: "Ready to add."
+  edit_started: "Started editing command block. Type /commandit edit to finish."
+  select_sign: "Select a command block to start editing."
+    
+failure:
+  prefix: "&c"
+  no_perms: "You do not have permission to do this."
+  wrong_syntax: "Wrong CommandIt command syntax."
+  no_super: "You may not make signs with '/*'."
+  no_op: "You may not make signs with '/^' or '/#'."
+  invalid_line: "Line number invalid!"
+  remove_first: "Command block code must be removed first."
+  already_enabled: "Command block is already enabled!"
+  not_a_sign: "Selected block is not a command block."
+  cannot_use: "You may not use this type of command block."
+  player_only: "This command can only be run as a player."
+  must_select: "You must select a sign to edit or leave edit mode with /commandit clear."
+  no_batch: "The mode you are in doesn't support batch processing."
+  not_in_mode: "You must type a command before toggling batch mode."
+    
+restriction:
+  not_permitted: "This {TYPE} isn't allowed to socialise with people like you."
+  bad_random: "You try to hit the {TYPE}, but you miss this time. The {TYPE} would laugh at you, but it can't laugh. Yet."
+  not_enough_money: "A magical force tries to take money from your pockets, but you don't have {MONEY}. It gives up."
+  cooldown: "The {TYPE} is tired! You must wait another {COOLDOWN} seconds before you start abusing it again."
+  inverse_cooldown: "The {TYPE} complains that it wasn't ready. Try again within {COOLDOWN} seconds, or it'll fall asleep again."
+  use_once: "The {TYPE} has already done its business with you. It doesn't want to do anything more."
+  inverse_use_once: "The {TYPE} wants you to use it before... you can use it? This is confusing. Game over: 0 points."
+  
+update:
+  prefix: "&e"
+  start: "Updating CommandIt to version &5{VERSION}{PREFIX}..."
+  finish: "Downloaded &5{SIZE}{PREFIX} KB in &5{TIME}{PREFIX} seconds. To complete the update, restart/reload your server."
+  already_downloaded: "An update to CommandIt is already waiting to be installed on reload/restart."
+  up_to_date: "CommandIt is already up to date. (&5{VERSION}{PREFIX})"
+  confirm_up_to_date: "CommandIt is up to date. (&5{VERSION}{PREFIX})"
+  notify: "CommandIt &5{VERSION}{PREFIX} is available. You can update your install with &5/cmdit update{PREFIX}."
+  fetch_error: "Error fetching update - {ERROR}"
+  check: "Checking for latest version..."
+  force: "Force updating CommandIt to latest version..."
+    
+metrics:
+  success: "Plugin metrics enabled! Thank you!"
+  opt_out: "You opted out of CommandIt metrics. =("
+  failure: "Could not initialize metrics."
