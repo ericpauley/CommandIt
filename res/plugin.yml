@@ -1,5 +1,5 @@
 name: CommandIt
-version: ___VERSION___
+version: "@VERSION@"
 description: 'Allows players to bind Lua scripts to blocks'
 authors: [zonedabone, CJxD]
 

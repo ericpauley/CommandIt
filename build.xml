@@ -10,7 +10,7 @@
 	<!-- Determine build number -->
 	<property environment="env" />
 	<condition property="build" value="${env.BUILD_NUMBER}">
-			<isset property="env.BUILD_NUMBER" />
+		<isset property="env.BUILD_NUMBER" />
 	</condition>
 	<property name="build" value="DEV" />
 
@@ -28,8 +28,10 @@
 		<antcall target="dist" />
 	</target>
 	<target name="dist" description="generate the distribution">
-		<copy file="${src}/plugin.yml" todir="${bin}" />
-		<replace file="${bin}/plugin.yml" token="___VERSION___" value="${version}-${build}" />
+		<filter token="VERSION" value="${version}-${build}" />
+		<copy todir="${bin}" filtering="true">
+			<fileset dir="${res}" />
+		</copy>
 		<jar jarfile="${bin}/CommandIt.jar" basedir="${bin}" encoding="Cp1252">
 			<zipfileset dir="." includes="*.lbc" />
 			<zipfileset dir="." includes="LICENSE.txt" />
