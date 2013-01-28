@@ -349,59 +349,7 @@ public class CommandListener implements CommandExecutor {
 
 	protected boolean update(final CommandSender sender, Player player,
 			String[] args) {
-		if (sender.hasPermission("CommandIt.update")) {
-			if (args.length == 2 && args[1].equalsIgnoreCase("force")) {
-				// Force-only. Does no check.
-				plugin.getMessenger().sendMessage(sender, "update.force");
-				plugin.getUpdater().newAvailable = true;
-				plugin.getUpdater().new UpdaterThread(sender).start();
-			} else {
-				// Preliminary check
-				plugin.getMessenger().sendMessage(sender, "update.check");
-				plugin.getUpdater().new Checker().run();
-
-				// If command wasn't 'update check', proceed and install the
-				// update
-				if (!(args.length == 2 && args[1].equalsIgnoreCase("check"))) {
-					if (plugin.getUpdater().newAvailable) {
-						if (!plugin.getUpdater().awaitingRestart) {
-							plugin.getMessenger()
-									.sendMessage(
-											sender,
-											"update.start",
-											new String[] { "VERSION" },
-											new String[] { plugin.getUpdater().newestVersion
-													.toString() });
-							plugin.getUpdater().new UpdaterThread(sender)
-									.start();
-						} else {
-							plugin.getMessenger().sendMessage(sender,
-									"update.already_downloaded");
-						}
-					}
-				} else {
-					// Otherwise, report the newest version
-					if (plugin.getUpdater().newAvailable) {
-						plugin.getMessenger()
-								.sendMessage(
-										sender,
-										"update.notify",
-										new String[] { "VERSION" },
-										new String[] { plugin.getUpdater().newestVersion
-												.toString() });
-
-					} else {
-						plugin.getMessenger()
-								.sendMessage(
-										sender,
-										"update.confirm_up_to_date",
-										new String[] { "VERSION" },
-										new String[] { plugin.getUpdater().currentVersion
-												.toString() });
-					}
-				}
-			}
-		}
+		//TODO: Write the update method...
 		return true;
 	}
 

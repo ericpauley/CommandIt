@@ -23,7 +23,7 @@ import org.zone.commandit.util.CodeLoader;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
-import org.zone.commandit.util.Updater;
+import org.zone.commandit.util.UpdateHelper;
 
 public class CommandIt extends JavaPlugin {
     
@@ -45,7 +45,7 @@ public class CommandIt extends JavaPlugin {
 		private final CodeLoader loader = new CodeLoader(this);
 		private final Config config = new Config(this);
 		private final Messages messenger = new Messages(this);
-		private final Updater updater = new Updater(this);
+		private UpdateHelper updater;
 
 		// Class variables
 		private BukkitTask updateTask;
@@ -99,7 +99,7 @@ public class CommandIt extends JavaPlugin {
 			setupEconomy();
 
 			if (config.getBoolean("updater.auto-check") == true)
-				startUpdateCheck();
+				updater.init();
 
 			if (config.getBoolean("metrics.enable") == true)
 				MetricsLoader.factory(this);
@@ -107,7 +107,7 @@ public class CommandIt extends JavaPlugin {
 				getLogger().info(messenger.parseRaw("metrics.opt_out"));
 		}
 
-		@Override
+        @Override
 		public void onDisable() {
 			if (updateTask != null)
 				updateTask.cancel();
@@ -147,15 +147,6 @@ public class CommandIt extends JavaPlugin {
 			}
 			return permission != null;
 		}
-
-		/**
-		 * Schedules updates to be checked daily
-		 */
-		public void startUpdateCheck() {
-			Runnable checker = getUpdater().new Checker();
-			updateTask = getServer().getScheduler().runTaskTimer(this, checker, 0,
-					1728000L);
-		}
 		
 		/**
 		 * @return Plugin's configuration and settings handler
@@ -178,7 +169,7 @@ public class CommandIt extends JavaPlugin {
 		/**
 		 * @return Handler for the updater system
 		 */
-		public Updater getUpdater() {
+		public UpdateHelper getUpdater() {
 			return updater;
 		}
 		

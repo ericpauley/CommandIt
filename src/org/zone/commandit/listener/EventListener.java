@@ -68,13 +68,7 @@ public class EventListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (plugin.hasPermission(event.getPlayer(), "CommandIt.update",
 				false)) {
-			if (plugin.getUpdater().newAvailable
-					&& !plugin.getUpdater().awaitingRestart) {
-				plugin.getMessenger().sendMessage(event.getPlayer(),
-						"update.notify", new String[] { "VERSION" },
-						new String[] { plugin.getUpdater().newestVersion
-								.toString() });
-			}
+			
 		}
 	}
 
