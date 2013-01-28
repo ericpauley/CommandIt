@@ -13,10 +13,16 @@ headers = {
         'X-API-Key': os.environ['BUKKITDEV_KEY']
 }
  
+versions = requests.get('http://dev.bukkit.org/game-versions.json').json()
+version = 0
+for i in versions.keys():
+    if(int(i)> version):
+        version = int(i)
+ 
 files = {'file': ('CommandIt.jar', open("CommandIt.jar"))}
 data = {
 	'name': '@VERSION@',
-	'game_versions': '255',
+	'game_versions': str(version),
 	'file_type': 'r',
 	'change_log': os.environ['CHANGE_LOG'],
 	'change_markup_type': 'creole',
