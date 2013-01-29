@@ -1,4 +1,4 @@
-config-version: 2.4
+config-version: "@VERSION@"
 prefix: "&4[CommandIt]&f "
 
 success:

@@ -23,7 +23,7 @@ import org.zone.commandit.util.CodeLoader;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
-import org.zone.commandit.util.UpdateHelper;
+import org.zone.commandit.util.Updater;
 
 public class CommandIt extends JavaPlugin {
     
@@ -45,7 +45,7 @@ public class CommandIt extends JavaPlugin {
 		private final CodeLoader loader = new CodeLoader(this);
 		private final Config config = new Config(this);
 		private final Messages messenger = new Messages(this);
-		private UpdateHelper updater;
+		private Updater updater;
 
 		// Class variables
 		private BukkitTask updateTask;
@@ -169,7 +169,7 @@ public class CommandIt extends JavaPlugin {
 		/**
 		 * @return Handler for the updater system
 		 */
-		public UpdateHelper getUpdater() {
+		public Updater getUpdater() {
 			return updater;
 		}
 		

@@ -5,7 +5,7 @@ import java.io.File;
 import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.CommandIt;
 
-public class UpdateHelper {
+public class Updater {
     
     private static final String url = "http://dev.thechalkpot.com:8080/job/CommandIt/";
     
@@ -44,7 +44,7 @@ public class UpdateHelper {
     private BukkitTask task;
     private Version currentVersion;
     
-    public UpdateHelper(CommandIt plugin, File pluginFile) {
+    public Updater(CommandIt plugin, File pluginFile) {
         this.plugin = plugin;
         this.pluginFile = pluginFile;
         currentVersion = Version.parse(plugin.getDescription().getVersion());

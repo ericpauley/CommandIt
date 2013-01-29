@@ -1,4 +1,4 @@
-config-version: 1.0.0
+config-version: "@VERSION@"
 
 # For updating the plugin automatically
 updater:

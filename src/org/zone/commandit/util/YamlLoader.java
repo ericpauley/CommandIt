@@ -7,6 +7,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.util.Updater.Version;
 
 public class YamlLoader {
 
@@ -35,11 +36,11 @@ public class YamlLoader {
 		Configuration external = YamlConfiguration.loadConfiguration(f);
 
 		// Check version information
-		int extVersion = external.getInt("config-version");
-		int incVersion = included.getInt("config-version");
+		Version extVersion = Version.parse(external.getString("config-version"));
+		Version incVersion = Version.parse(included.getString("config-version"));
 
 		// Update external file if included file is newer
-		if (incVersion > extVersion) {
+		if (incVersion.getBuild() > extVersion.getBuild()) {
 			plugin.getLogger().info("Updating " + filename + ".");
 
 			// Copy all the loaded configuration into the new included format
