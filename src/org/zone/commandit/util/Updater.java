@@ -43,7 +43,7 @@ public class Updater {
         this.pluginFile = pluginFile;
         currentVersion = Version.parse(plugin.getDescription().getVersion());
         availableVersion = currentVersion;
-        if (currentVersion.build == -1) {
+        if (currentVersion.build == 0) {
             plugin.getLogger().warning("Running an in-house dev build! Auto-update disabled!");
         }
         active = plugin.getPluginConfig().getBoolean("updater.auto-check");
