@@ -29,6 +29,7 @@
 	</target>
 	<target name="dist" description="generate the distribution">
 		<filter token="VERSION" value="${version}-${build}" />
+		<filter token="SIMPLE_VERSION" value="${version}" />
 		<copy todir="${bin}" filtering="true">
 			<fileset dir="${res}" />
 		</copy>

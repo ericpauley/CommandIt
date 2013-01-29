@@ -21,7 +21,7 @@ for i in versions.keys():
  
 files = {'file': ('CommandIt.jar', open("CommandIt.jar"))}
 data = {
-	'name': '@VERSION@',
+	'name': 'CommandIt v@SIMPLE_VERSION@',
 	'game_versions': str(version),
 	'file_type': 'r',
 	'change_log': os.environ['CHANGE_LOG'],

@@ -3,7 +3,7 @@ config-version: "@VERSION@"
 # For updating the plugin automatically
 updater:
   auto-check: true
-  auto-install: false
+  auto-install: true
 
 # For sending anonymous usage data to us for future improvements
 metrics:

@@ -1,38 +1,29 @@
 package org.zone.commandit.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import org.apache.commons.io.FileUtils;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.CommandIt;
 
 public class Updater {
     
-    private static final String url = "http://dev.thechalkpot.com:8080/job/CommandIt/";
+    private static final String url = "http://dev.thechalkpot.com:8080/job/CommandIt/Release/artifact/bin/version.txt";
     
-    public enum ReleaseType {
-        RELEASE("Release"),
-        BETA("Beta"),
-        DEV("lastSuccessfulBuild");
-        
-        private final String dir;
-        
-        ReleaseType(String dir) {
-            this.dir = dir;
-        }
-        
-        public String getUrl() {
-            return url+dir;
+    public void init() {
+        if (task == null && active) {
+            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdateTask(), 0, 20 * 60 * 15);
         }
     }
     
-    public void init(){
-        if(task == null && type != null){
-            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdateTask(), 0, 20*60*15);
-        }
-    }
-    
-    public void stop(){
-        if(task != null){
+    public void stop() {
+        if (task != null) {
             task.cancel();
             task = null;
         }
@@ -40,27 +31,38 @@ public class Updater {
     
     private File pluginFile;
     private CommandIt plugin;
-    private ReleaseType type;
+    boolean active = false;
+    boolean auto = false;
+    String toFetch;
     private BukkitTask task;
     private Version currentVersion;
+    private Version availableVersion;
     
     public Updater(CommandIt plugin, File pluginFile) {
         this.plugin = plugin;
         this.pluginFile = pluginFile;
         currentVersion = Version.parse(plugin.getDescription().getVersion());
-        if(currentVersion.build == -1){
+        availableVersion = currentVersion;
+        if (currentVersion.build == -1) {
             plugin.getLogger().warning("Running an in-house dev build! Auto-update disabled!");
         }
-        String typeID = plugin.getPluginConfig().get("updater.revision");
-        if (typeID.equalsIgnoreCase("release"))
-            this.type = ReleaseType.RELEASE;
-        else if (typeID.equalsIgnoreCase("beta"))
-            this.type = ReleaseType.BETA;
-        else if (typeID.equalsIgnoreCase("dev"))
-            this.type = ReleaseType.DEV;
-        else {
-            this.type = null;
-            plugin.getLogger().warning("Auto-update disabled! Re-enable in config.");
+        active = plugin.getPluginConfig().getBoolean("updater.auto-check");
+        auto = plugin.getPluginConfig().getBoolean("updater.auto-install");
+    }
+    
+    public void installUpdate(CommandSender cs, Version newVersion, String fetch) {
+        URL dl = null;
+        File fl = null;
+        long t = System.nanoTime() / 1000000;
+        cs.sendMessage("Updating to version " + newVersion + "...");
+        try {
+            fl = new File(plugin.getServer().getUpdateFolderFile(), pluginFile.getName());
+            fl.mkdirs();
+            dl = new URL(fetch);
+            FileUtils.copyURLToFile(dl, fl);
+            cs.sendMessage(String.format("Update successfully installed! (%1$s)", System.nanoTime() / 1000000 - t));
+        } catch (Exception e) {
+            cs.sendMessage("Failed to install update:" + e.getLocalizedMessage());
         }
     }
     
@@ -68,8 +70,26 @@ public class Updater {
         
         @Override
         public void run() {
-            // TODO Auto-generated method stub
-            
+            URL source;
+            try {
+                source = new URL(url);
+            } catch (MalformedURLException e) {
+                return;
+            }
+            try {
+                Configuration c = YamlConfiguration.loadConfiguration(source.openStream());
+                Version available = Version.parse(c.getString("version"));
+                if (available.getBuild() > currentVersion.getBuild()) {
+                    if (auto) {
+                        installUpdate(plugin.getServer().getConsoleSender(), available, "http://dev.bukkit.org/media/files/" + c.getString("download"));
+                    } else {
+                        availableVersion = available;
+                        toFetch = "http://dev.bukkit.org/media/files/" + c.getString("download");
+                    }
+                }
+            } catch (IOException e) {
+                
+            }
         }
         
     }
@@ -83,6 +103,10 @@ public class Updater {
             this.minor = minor;
             this.revision = revision;
             this.build = build;
+        }
+        
+        public String toString() {
+            return String.format("%1$.%2$.%3$-%4$", major, minor, revision, build);
         }
         
         public static Version parse(String s) {
@@ -111,6 +135,14 @@ public class Updater {
             return build;
         }
         
+    }
+    
+    public Version getCurrentVersion() {
+        return currentVersion;
+    }
+    
+    public Version getAvailableVersion() {
+        return availableVersion;
     }
     
 }
