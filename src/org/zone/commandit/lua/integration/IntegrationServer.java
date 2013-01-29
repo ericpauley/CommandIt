@@ -1,37 +1,36 @@
 package org.zone.commandit.lua.integration;
 
 import org.bukkit.Server;
-import org.zone.commandit.lua.util.LuaUtil;
 
-import se.krka.kahlua.vm.KahluaTable;
-
+import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationServer {
     
     private Server s;
     
-    public IntegrationServer(Server s){
+    public IntegrationServer(Server s) {
         this.s = s;
     }
     
-    public void shutdown(){
+    @LuaMethod
+    public void shutdown() {
         s.shutdown();
     }
-    
-    public void broadcast(String message){
+    @LuaMethod
+    public void broadcast(String message) {
         s.broadcastMessage(message);
     }
-    
-    public KahluaTable getPlayers(){
+    @LuaMethod
+    public IntegrationPlayer[] getPlayers() {
         IntegrationPlayer[] players = new IntegrationPlayer[s.getOnlinePlayers().length];
-        for(int i = 0;i<players.length;i++){
+        for (int i = 0; i < players.length; i++) {
             players[i] = new IntegrationPlayer(s.getOnlinePlayers()[i]);
         }
-        return LuaUtil.expose(players);
+        return players;
     }
-    
-    public KahluaTable getPlayer(String name){
-        return LuaUtil.expose(s.getPlayer(name));
+    @LuaMethod
+    public IntegrationPlayer getPlayer(String name) {
+        return new IntegrationPlayer(s.getPlayer(name));
     }
     
 }
