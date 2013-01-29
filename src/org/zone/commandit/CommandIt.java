@@ -98,6 +98,7 @@ public class CommandIt extends JavaPlugin {
 			setupPermissions();
 			setupEconomy();
 
+			updater = new Updater(this, this.getFile());
 			if (config.getBoolean("updater.auto-check") == true)
 				updater.init();
 
