@@ -83,7 +83,7 @@ public class CommandIt extends JavaPlugin {
 				perm = permission.has(player, string);
 			}
 			if (perm == false && notify) {
-				messenger.sendMessage(player, "failure.no_perms");
+				M.sendMessage(player, "failure.no_perms");
 			}
 			return perm;
 		}
@@ -105,7 +105,7 @@ public class CommandIt extends JavaPlugin {
 			if (config.getBoolean("metrics.enable") == true)
 				MetricsLoader.factory(this);
 			else
-				getLogger().info(messenger.parseRaw("metrics.opt_out"));
+			    M.info("metrics.opt_out");
 		}
 
         @Override

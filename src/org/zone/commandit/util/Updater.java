@@ -82,7 +82,7 @@ public class Updater {
                 if (available.getBuild() > currentVersion.getBuild()) {
                     if (auto) {
                         installUpdate(plugin.getServer().getConsoleSender(), available, "http://dev.bukkit.org/media/files/" + c.getString("download"));
-                        availableVersion=available;
+                        availableVersion = available;
                     } else {
                         availableVersion = available;
                         toFetch = "http://dev.bukkit.org/media/files/" + c.getString("download");

@@ -56,7 +56,7 @@ update:
   already_downloaded: "An update to CommandIt is already waiting to be installed on reload/restart."
   up_to_date: "CommandIt is already up to date. (&5{VERSION}{PREFIX})"
   confirm_up_to_date: "CommandIt is up to date. (&5{VERSION}{PREFIX})"
-  notify: "CommandIt &5{VERSION}{PREFIX} is available. You can update your install with &5/cmdit update{PREFIX}."
+  notify: "CommandIt  version &5{VERSION}{PREFIX} is available. You can update your install with &5/cmdit update{PREFIX}."
   fetch_error: "Error fetching update - {ERROR}"
   check: "Checking for latest version..."
   force: "Force updating CommandIt to latest version..."

@@ -3,6 +3,7 @@ package org.zone.commandit.util;
 import java.io.IOException;
 
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.config.M;
 import org.zone.commandit.thirdparty.Metrics;
 import org.zone.commandit.thirdparty.Metrics.Graph;
 import org.zone.commandit.thirdparty.Metrics.Plotter;
@@ -75,14 +76,14 @@ public class MetricsLoader {
 				}
 			});
 			if (metrics.start()) {
-				plugin.getLogger().info(plugin.getMessenger().parseRaw("metrics.success"));
+               M.info("metrics.success");
 			} else {
-				plugin.getLogger().info(plugin.getMessenger().parseRaw("metrics.failure"));
+                plugin.getLogger().info(M.parseRaw("metrics.failure"));
 			}
 			
 			return metrics;
 		} catch (IOException e) {
-			plugin.getLogger().warning(plugin.getMessenger().parseRaw("metrics.failure"));
+            plugin.getLogger().warning(M.parseRaw("metrics.failure"));
 			return null;
 		}
 	}
