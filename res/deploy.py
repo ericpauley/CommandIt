@@ -16,7 +16,7 @@ headers = {
 versions = requests.get('http://dev.bukkit.org/game-versions.json').json()
 version = 0
 for i in versions.keys():
-    if(int(i)> version):
+    if(int(i) > version):
         version = int(i)
  
 files = {'file': ('CommandIt.jar', open("CommandIt.jar"))}
@@ -30,10 +30,13 @@ data = {
 	'caveats_markup_type': 'creole',
 }
  
-r = requests.post('http://dev.bukkit.org/server-mods/cmdit/upload-file.json', data = data, headers = headers, files = files)
+r = requests.post('http://dev.bukkit.org/server-mods/cmdit/upload-file.json', data=data, headers=headers, files=files)
 p = requests.get(r.headers['location']).text
 m = re.search('"http://dev.bukkit.org/media/files/(.*/.*/.*)"', p)
 url = m.group(1)
 f = open("version.txt", 'w');
-f.write('version: ' + data['name']+"\ndownload: "+url)
+f.write("""
+version: @VERSION@
+download: %s
+""" % url)
 f.close();
