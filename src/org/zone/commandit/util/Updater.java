@@ -59,7 +59,7 @@ public class Updater {
             fl = new File(plugin.getServer().getUpdateFolderFile(), pluginFile.getName());
             dl = new URL(fetch);
             FileUtils.copyURLToFile(dl, fl);
-            cs.sendMessage(String.format("Update successfully installed! (%ds)", System.nanoTime() / 1000000 - t));
+            cs.sendMessage(String.format("Update successfully installed! (%dms)", System.nanoTime() / 1000000 - t));
         } catch (Exception e) {
             cs.sendMessage("Failed to install update:" + e.getLocalizedMessage());
         }
