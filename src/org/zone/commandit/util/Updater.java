@@ -113,7 +113,7 @@ public class Updater {
             String build = parts[1];
             parts = parts[0].split("\\.");
             if (build.equalsIgnoreCase("DEV"))
-                return new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), -1);
+                return new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), 0);
             else
                 return new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(build));
         }

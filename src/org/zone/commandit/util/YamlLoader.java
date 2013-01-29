@@ -40,7 +40,7 @@ public class YamlLoader {
 		Version incVersion = Version.parse(included.getString("config-version"));
 
 		// Update external file if included file is newer
-		if (incVersion.getBuild() > extVersion.getBuild() || incVersion.getBuild() == -1) {
+		if (incVersion.getBuild() > extVersion.getBuild() || incVersion.getBuild() == 0) {
 			plugin.getLogger().info("Updating " + filename + ".");
 
 			// Copy all the loaded configuration into the new included format
