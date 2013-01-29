@@ -57,7 +57,6 @@ public class Updater {
         cs.sendMessage("Updating to version " + newVersion + "...");
         try {
             fl = new File(plugin.getServer().getUpdateFolderFile(), pluginFile.getName());
-            fl.mkdirs();
             dl = new URL(fetch);
             FileUtils.copyURLToFile(dl, fl);
             cs.sendMessage(String.format("Update successfully installed! (%ds)", System.nanoTime() / 1000000 - t));
