@@ -15,6 +15,7 @@ import org.zone.commandit.CommandIt;
 import org.zone.commandit.handler.ClickHandler;
 import org.zone.commandit.handler.Executor;
 import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.Updater;
 
 public class EventListener implements Listener {
 
@@ -68,7 +69,10 @@ public class EventListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (plugin.hasPermission(event.getPlayer(), "CommandIt.update",
 				false)) {
-			
+		    Updater u = plugin.getUpdater();
+			if(u.getAvailableVersion().getBuild()>u.getCurrentVersion().getBuild()){
+			    event.getPlayer().sendMessage("An update to CommandIt is available. Install with /commandit update");
+			}
 		}
 	}
 

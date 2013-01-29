@@ -15,7 +15,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.config.Config;
-import org.zone.commandit.config.Messages;
+import org.zone.commandit.config.M;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
@@ -44,7 +44,7 @@ public class CommandIt extends JavaPlugin {
 
 		private final CodeLoader loader = new CodeLoader(this);
 		private final Config config = new Config(this);
-		private final Messages messenger = new Messages(this);
+		private final M messenger = new M(this);
 		private Updater updater;
 
 		// Class variables
@@ -164,7 +164,7 @@ public class CommandIt extends JavaPlugin {
 		/**
 		 * @return Handler for sending messages and statuses to players
 		 */
-		public Messages getMessenger() {
+		public M getMessenger() {
 			return messenger;
 		}
 		/**

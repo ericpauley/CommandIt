@@ -63,6 +63,7 @@ public class Updater {
         } catch (Exception e) {
             cs.sendMessage("Failed to install update:" + e.getLocalizedMessage());
         }
+        this.currentVersion = newVersion;
     }
     
     private class UpdateTask implements Runnable {
@@ -81,6 +82,7 @@ public class Updater {
                 if (available.getBuild() > currentVersion.getBuild()) {
                     if (auto) {
                         installUpdate(plugin.getServer().getConsoleSender(), available, "http://dev.bukkit.org/media/files/" + c.getString("download"));
+                        availableVersion=available;
                     } else {
                         availableVersion = available;
                         toFetch = "http://dev.bukkit.org/media/files/" + c.getString("download");
