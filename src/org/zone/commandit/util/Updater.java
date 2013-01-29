@@ -60,7 +60,7 @@ public class Updater {
             fl.mkdirs();
             dl = new URL(fetch);
             FileUtils.copyURLToFile(dl, fl);
-            cs.sendMessage(String.format("Update successfully installed! (%1$s)", System.nanoTime() / 1000000 - t));
+            cs.sendMessage(String.format("Update successfully installed! (%ds)", System.nanoTime() / 1000000 - t));
         } catch (Exception e) {
             cs.sendMessage("Failed to install update:" + e.getLocalizedMessage());
         }
@@ -106,7 +106,7 @@ public class Updater {
         }
         
         public String toString() {
-            return String.format("%1$.%2$.%3$-%4$", major, minor, revision, build);
+            return String.format("%d.%d.%d-%d", major, minor, revision, build);
         }
         
         public static Version parse(String s) {
