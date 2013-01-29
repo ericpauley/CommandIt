@@ -119,7 +119,7 @@ public class CommandIt extends JavaPlugin {
 		public void onEnable() {
 			load();
 			PluginManager pm = getServer().getPluginManager();
-			getCommand("commandsigns").setExecutor(commandExecutor);
+			getCommand("commandit").setExecutor(commandExecutor);
 			pm.registerEvents(listener, this);
 		}
 

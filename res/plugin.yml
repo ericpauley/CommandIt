@@ -10,7 +10,7 @@ softdepend: [Multiverse-Core]
 
 commands:
   commandit:
-    aliases: [cmdit]
+    aliases: [cmdit, ci, cmdi]
     description: CommandIt commands.
     usage: |
         /commandit <linenumber> <text>
