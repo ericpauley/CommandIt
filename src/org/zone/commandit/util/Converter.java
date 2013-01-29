@@ -1,7 +1,6 @@
 package org.zone.commandit.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,22 +13,20 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
 
-public class CodeLoader {
-
-	protected CommandIt plugin;
-
-	public CodeLoader(CommandIt plugin) {
-		this.plugin = plugin;
+public class Converter extends CodeLoader {
+	
+	public Converter(CommandIt plugin) {
+		super(plugin);
 	}
 
-	public Map<Location, LuaCode> loadFile() {
+	public void loadFile(String filename) {
 		Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
 		FileConfiguration config = YamlConfiguration
-				.loadConfiguration(new File(plugin.getDataFolder() + "signs.yml"));
+				.loadConfiguration(new File(filename));
 		ConfigurationSection data = config.getConfigurationSection("signs");
 		if (data == null) {
 			plugin.getLogger().info("No old signs found.");
-			return null;
+			return;
 		}
 		String[] locText;
 		World world;
@@ -93,40 +90,5 @@ public class CodeLoader {
 		}
 		plugin.getLogger().info(
 				"Successfully loaded " + plugin.getCodeBlocks().size() + " signs");
-		return loaded;
-	}
-
-	public void saveFile() {
-		FileConfiguration config = new YamlConfiguration();
-		ConfigurationSection data = config.createSection("signs");
-		for (Map.Entry<Location, LuaCode> sign : plugin.getCodeBlocks().entrySet()) {
-			Location loc = sign.getKey();
-			LuaCode cst = sign.getValue();
-			cst.trim();
-			String key = loc.getWorld().getName() + "," + loc.getBlockX() + ","
-					+ loc.getBlockY() + "," + loc.getBlockZ();
-			ConfigurationSection signData = data.createSection(key);
-			signData.set("redstone", cst.isRedstone());
-			signData.set("owner", cst.getOwner());
-			signData.set("text", cst.getText());
-			signData.set("active", cst.isEnabled());
-			signData.createSection("cooldowns", cst.getTimeouts());
-			/*
-			 * data.set(key + ".lastuse", cst.getLastUse()); data.set(key +
-			 * ".numuses", cst.getNumUses()); List<String> useData = new
-			 * ArrayList<String>(cst.getUses().size()); for (OfflinePlayer user
-			 * : cst.getTimeouts().keySet()) { useData.add(user.getName() + ","
-			 * + cst.getLastUse(user) + "," + cst.getUses(user)); } data.set(key
-			 * + ".usedata", useData);
-			 */
-			try {
-				config.save(new File(plugin.getDataFolder(), "signs.yml"));
-				plugin.getLogger().info(
-						plugin.getCodeBlocks().size() + " signs saved");
-			} catch (IOException e) {
-				plugin.getLogger().severe("Failed to save CommandIt");
-				e.printStackTrace();
-			}
-		}
 	}
 }
