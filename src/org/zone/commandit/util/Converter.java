@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.config.M;
 
 public class Converter extends FileLoader {
     
@@ -26,7 +27,15 @@ public class Converter extends FileLoader {
         	key = key.replace("text", "code");
         }
         
-        return load(config);
+        M.info("Attempting import of " + filename + "...");
+        
+        Map<Location, LuaCode> loaded = load(config);
+        
+        for (Map.Entry<Location, LuaCode> entry : loaded.entrySet()) {
+        	entry.setValue(convertToLua(entry.getValue()));
+        }
+        
+        return loaded;
     }
     
     /**
@@ -37,10 +46,114 @@ public class Converter extends FileLoader {
      */
     protected LuaCode convertToLua(LuaCode cst) {
         for (String s : cst) {
+        	// Misc
+        	s = s.replace("{", "\\{");
+        	s = s.replace("}", "\\}");
+        	if (s.startsWith("!")) {
+        		s = s.replace("!", "} else {");
+        	}
+        	
+        	// Directives
+        	if (s.startsWith("\\")) {
+        		s = s.substring(1);
+        		s = "text(\""+s+"\")";
+        		continue;
+        	}
+        	else if (s.startsWith(".")) {
+        		s = s.substring(1);
+        		s = "player.say(\""+s+"\")";
+        		continue;
+        	}
+        	else if (s.startsWith("%")) {
+        		s = s.substring(1);
+        		s = "delay("+s+")";
+        		continue;
+        	}
+        	else if (s.startsWith("`")) {
+        		s = s.substring(1);
+        		s = "delay(random(0, "+s+"))";
+        		continue;
+        	}
+        	
+        	/* 
+        	 * These strings are added to the final
+        	 * replacement strings rather than just
+        	 * using booleans.
+        	 */
+        	String visible = ")";
+        	String not = "";
+        	
+        	while (s.contains("-")) {
+        		s = s.replaceFirst("-", "}");
+        	}
+        	while (s.contains("?")) {
+        		s = s.replaceFirst("\\?", "");
+        		visible = ", false)";
+        	}
+        	while (s.contains("!")) {
+        		s = s.replaceFirst("\\!", "");
+        		not = "!";
+        	}
+        	
             // Restrictions
-            
+        	String format = "if ("+not+"#) {";
+        	if (s.startsWith("@")) {
+        		s = s.substring(1);
+        		// Split multiple entries using commas
+        		String[] groups = s.split(",");
+        		String replacement = "";
+        		for (int i = 0; i < groups.length; i++) {
+        			replacement += "player.inGroup(\""+groups[i]+"\")";
+        			// If not last, add the ' or ' connective
+        			if (i < groups.length) replacement += " or ";
+        		}
+        		s = format.replaceFirst("#", replacement);
+        		// We're done here, continue
+        		continue;
+        	}
+        	else if (s.startsWith("~")) {
+        		s = s.substring(1);
+        		s = format.replaceFirst("#", "player.timeout > "+s);
+        		continue;
+        	}
+        	else if (s.startsWith("$")) {
+        		s = s.substring(1);
+        		s = format.replaceFirst("#", "player.balance > "+s);
+        		continue;
+        	}
+        	else if (s.startsWith("&")) {
+        		s = s.substring(1);
+        		String[] perms = s.split(",");
+        		String replacement = "";
+        		for (int i = 0; i < perms.length; i++) {
+        			replacement += "player.hasPerm(\""+perms[i]+"\")";
+        			if (i < perms.length) replacement += " or ";
+        		}
+        		s = format.replaceFirst("#", replacement);
+        		continue;
+        	}
+        	
             // Commands
-            
+        	if (s.startsWith("/")) {
+        		String command = "run";
+        		s = s.substring(1);
+        		
+        		if (s.startsWith("#")) {
+            		command = "console";
+            		s = s.substring(1);
+            	}
+            	else if (s.startsWith("^")) {
+            		command = "op";
+            		s = s.substring(1);
+            	}
+            	else if (s.startsWith("*")) {
+            		command = "super";
+            		s = s.substring(1);
+            	}
+        		
+        		s = command + "(\"" + s + "\"" + visible;
+        	}
+        	
             // Variables
         	s = s.replace("<x>", "{player.x}");
         	s = s.replace("<y>", "{player.y}");
