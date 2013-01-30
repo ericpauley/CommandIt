@@ -14,24 +14,61 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
 
-public class CodeLoader {
+public class FileLoader implements Loader {
     
     protected CommandIt plugin;
     
-    public CodeLoader(CommandIt plugin) {
+    public FileLoader(CommandIt plugin) {
         this.plugin = plugin;
     }
     
     /**
-     * Load command blocks from file
-     * 
-     * @return
+     * Load command blocks from files
      */
-    public Map<Location, LuaCode> loadFile() {
+    @Override
+	public Map<Location, LuaCode> load(String filename) {
+    	FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + filename));
+		return load(config);
+	}
+    
+    /**
+     * Save command blocks to file
+     */
+    @Override
+    public void save(Map<Location, LuaCode> cache, String filename) {
+        FileConfiguration config = new YamlConfiguration();
+        ConfigurationSection data = config.createSection("blocks");
+        
+        for (Map.Entry<Location, LuaCode> entry : cache.entrySet()) {
+            Location loc = entry.getKey();
+            LuaCode code = entry.getValue();
+            code.trim();
+            
+            String key = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+            
+            ConfigurationSection block = data.createSection(key);
+            block.set("owner", code.getOwner());
+            block.set("code", code.getLines());
+            block.set("active", code.isEnabled());
+            block.createSection("cooldowns", code.getTimeouts());
+            
+            try {
+                config.save(new File(plugin.getDataFolder(), filename));
+                plugin.getLogger().info(plugin.getCodeBlocks().size() + " command blocks saved");
+            } catch (IOException e) {
+                plugin.getLogger().severe("Failed to save CommandIt");
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Worker for loading to files
+     */
+    protected Map<Location, LuaCode> load(FileConfiguration file) {
         Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
         
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "blocks.yml"));
-        ConfigurationSection data = config.getConfigurationSection("blocks");
+        ConfigurationSection data = file.getConfigurationSection("blocks");
         if (data == null) {
             plugin.getLogger().info("No command blocks found.");
             return null;
@@ -92,37 +129,5 @@ public class CodeLoader {
         }
         plugin.getLogger().info("Successfully loaded " + plugin.getCodeBlocks().size() + " command blocks");
         return loaded;
-    }
-    
-    /**
-     * Save command blocks to file
-     * 
-     * @return
-     */
-    public void saveFile() {
-        FileConfiguration config = new YamlConfiguration();
-        ConfigurationSection data = config.createSection("blocks");
-        
-        for (Map.Entry<Location, LuaCode> sign : plugin.getCodeBlocks().entrySet()) {
-            Location loc = sign.getKey();
-            LuaCode code = sign.getValue();
-            code.trim();
-            
-            String key = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
-            
-            ConfigurationSection block = data.createSection(key);
-            block.set("owner", code.getOwner());
-            block.set("code", code.getLines());
-            block.set("active", code.isEnabled());
-            block.createSection("cooldowns", code.getTimeouts());
-            
-            try {
-                config.save(new File(plugin.getDataFolder(), "blocks.yml"));
-                plugin.getLogger().info(plugin.getCodeBlocks().size() + " command blocks saved");
-            } catch (IOException e) {
-                plugin.getLogger().severe("Failed to save CommandIt");
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -1,102 +1,38 @@
 package org.zone.commandit.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
 
-public class Converter extends CodeLoader {
+public class Converter extends FileLoader {
     
     public Converter(CommandIt plugin) {
         super(plugin);
     }
     
     /**
-     * Load command blocks from file
-     * 
-     * @return
+     * Load CommandSigns from file
      */
-    public Map<Location, LuaCode> loadFile(String filename) {
-        Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
-        
+    public Map<Location, LuaCode> load(String filename) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(filename));
-        ConfigurationSection data = config.getConfigurationSection("signs");
-        if (data == null) {
-            plugin.getLogger().info("No old CommandSigns found.");
-            return null;
+        
+        // Rename signs.* to blocks.* and .text to .code
+        for (String key : config.getKeys(true)) {
+        	key = key.replace("signs", "blocks");
+        	key = key.replace("text", "code");
         }
         
-        String[] locText;
-        World world;
-        int x, y, z, block;
-        Location loc;
-        int attempts = 0;
-        
-        for (String key : data.getKeys(false)) {
-            try {
-                // Attempts to count the number of entries in the file
-                attempts++;
-                
-                // Decode location
-                locText = key.split(",");
-                world = Bukkit.getWorld(locText[0]);
-                if (world == null)
-                    throw new IllegalArgumentException("World does not exist: " + locText[0] + ".");
-                x = Integer.parseInt(locText[1]);
-                y = Integer.parseInt(locText[2]);
-                z = Integer.parseInt(locText[3]);
-                loc = new Location(world, x, y, z);
-                
-                // Throws exception for an invalid location AND if the
-                // location is air
-                block = loc.getBlock().getTypeId();
-                if (block == 0)
-                    throw new IllegalArgumentException("Location not valid: " + loc.toString() + ".");
-                
-                // Get attributes
-                String owner = data.getString(key + ".owner", null);
-                
-                LuaCode code = new LuaCode(owner);
-                for (Object o : data.getList(key + ".text", new ArrayList<String>())) {
-                    code.addLine(o.toString());
-                }
-                code = convertToLua(code);
-                
-                code.setEnabled(data.getBoolean(key + ".active", true));
-                
-                // Cooldowns as Player => Expiry (UNIX timestamp)
-                Map<String, Long> timeouts = code.getTimeouts();
-                ConfigurationSection cooldowns = data.getConfigurationSection(key + ".cooldowns");
-                if (cooldowns == null) {
-                    cooldowns = data.createSection(key + "cooldowns");
-                }
-                for (String player : cooldowns.getKeys(false)) {
-                    timeouts.put(player, cooldowns.getLong(player));
-                }
-                
-                plugin.getCodeBlocks().put(loc, code);
-            } catch (Exception ex) {
-                plugin.getLogger().warning("Unable to load CommandSign " + attempts + ". " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-        plugin.getLogger().info("Successfully loaded " + plugin.getCodeBlocks().size() + " old CommandSigns");
-        return loaded;
+        return load(config);
     }
     
     /**
-     * Converts old CommandSigns text to Lua equivelant
+     * Converts old CommandSigns text to Lua equivalent
      * 
-     * @param cst
-     *            Text to be converted in a LuaCode object
+     * @param cst LuaCode text to be converted to Lua
      * @return
      */
     protected LuaCode convertToLua(LuaCode cst) {
@@ -106,7 +42,21 @@ public class Converter extends CodeLoader {
             // Commands
             
             // Variables
-            s.replace("<player>", "getPlayer()");
+        	s = s.replace("<x>", "{player.x}");
+        	s = s.replace("<y>", "{player.y}");
+        	s = s.replace("<z>", "{player.z}");
+        	s = s.replace("<blockx>", "{x}");
+        	s = s.replace("<blocky>", "{y}");
+        	s = s.replace("<blockz>", "{z}");
+        	s = s.replace("<world>", "{world}");
+        	s = s.replace("<name>", "{player.name}");
+            s = s.replace("<player>", "{player.name}");
+            s = s.replace("<randomname>", "{randomPlayer()}");
+            s = s.replace("<near>", "{nearest.name}");
+            s = s.replace("<display>", "{player.display}");
+            s = s.replace("<money>", "{player.balance}");
+            s = s.replace("<formatted>", "{player.money}");
+            s = s.replace("<ip>", "{player.ip}");
         }
         return cst;
     }

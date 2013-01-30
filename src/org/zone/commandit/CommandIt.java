@@ -20,7 +20,7 @@ import org.zone.commandit.config.M;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
-import org.zone.commandit.util.CodeLoader;
+import org.zone.commandit.util.FileLoader;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
@@ -45,7 +45,7 @@ public class CommandIt extends JavaPlugin {
     private Map<OfflinePlayer, PlayerState> playerStates = new HashMap<OfflinePlayer, PlayerState>();
     private Map<OfflinePlayer, LuaCode> playerCode = new HashMap<OfflinePlayer, LuaCode>();
     
-    private final CodeLoader loader = new CodeLoader(this);
+    private final FileLoader loader = new FileLoader(this);
     private final Config config = new Config(this);
     private final M messenger = new M(this);
     private Updater updater;
@@ -179,7 +179,7 @@ public class CommandIt extends JavaPlugin {
     /**
      * @return Handler for loading code block data
      */
-    public CodeLoader getCodeLoader() {
+    public FileLoader getCodeLoader() {
         return loader;
     }
     
