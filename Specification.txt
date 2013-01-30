@@ -26,6 +26,10 @@ this
 	randomLoc() - String
 	randomLoc(int maxX, int maxY, int maxZ) - String
 	randomPlayer() - String
+	isLeftClick() - Boolean
+	isRightClick() - Boolean
+	isPhysical() - Boolean
+	isRedstone() - Boolean
 	
 Player
 	Fields:
