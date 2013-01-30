@@ -1,0 +1,42 @@
+LUA SCRIPT SPECIFICATION
+
+this
+	Fields:
+	player
+	time
+	
+	Methods:
+	run(String command)
+	run(String command, bool visible)
+	super(String command)
+	super(String command, bool visible)
+	op(String command)
+	op(String command, bool visible)
+	console(String command)
+	console(String command, bool visible)
+	text(String message)
+	delay(int seconds)
+	random(int min, int max)
+	randomLoc()
+	randomLoc(int maxX, int maxY, int maxZ)
+	
+player
+	Fields:
+	money
+	timeout
+
+	Methods:
+	hasPerm(String permission)
+	inGroup(String group)
+	inGroup(String group, bool inherited)
+	say(String message)
+	hasItem(String item)
+	takeItem(String item, int quantity)
+	giveItem(String item, int quantity)
+	takeMoney(int amount)
+	
+time
+	Methods:
+	asTicks()
+	toString()
+	
