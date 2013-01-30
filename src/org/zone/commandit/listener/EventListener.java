@@ -2,20 +2,16 @@ package org.zone.commandit.listener;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.zone.commandit.CommandIt;
 import org.zone.commandit.config.M;
 import org.zone.commandit.handler.ClickHandler;
-import org.zone.commandit.handler.Executor;
-import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.Updater;
 
 public class EventListener implements Listener {
@@ -26,13 +22,13 @@ public class EventListener implements Listener {
         this.plugin = plugin;
     }
     
-    public void handleRedstone(Block b) {
+    /*public void handleRedstone(Block b) {
         Location csl = b.getLocation();
         LuaCode text = plugin.getCodeBlocks().get(csl);
         if (text != null && text.isRedstone()) {
             new Executor(plugin, null, csl, null).run();
         }
-    }
+    }*/
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -71,7 +67,7 @@ public class EventListener implements Listener {
         }
     }
     
-    @EventHandler
+    /*@EventHandler
     public void onRedstoneChange(BlockRedstoneEvent event) {
         if (event.getNewCurrent() != 0 && event.getOldCurrent() == 0) {
             Block b = event.getBlock();
@@ -83,5 +79,5 @@ public class EventListener implements Listener {
             handleRedstone(b.getRelative(BlockFace.UP));
             handleRedstone(b.getRelative(BlockFace.DOWN));
         }
-    }
+    }*/
 }

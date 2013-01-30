@@ -118,7 +118,7 @@ public class CommandListener implements CommandExecutor {
             }
             LuaCode text = plugin.getPlayerCode().get(player);
             if (text == null) {
-                text = new LuaCode(player.getName(), false);
+                text = new LuaCode(player.getName());
                 plugin.getPlayerCode().put(player, text);
             }
             String line = StringUtils.join(args, " ", textStart, args.length);

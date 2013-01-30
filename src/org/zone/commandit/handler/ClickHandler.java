@@ -141,12 +141,12 @@ public class ClickHandler {
                 case BATCH_TOGGLE:
                     toggleSign(true);
                     break;
-                case REDSTONE:
+                /*case REDSTONE:
                     redstoneToggle(false);
                     break;
                 case BATCH_REDSTONE:
                     redstoneToggle(true);
-                    break;
+                    break;*/
                 default:
                     return new Executor(plugin, player, location, action).run();
             }
@@ -175,7 +175,7 @@ public class ClickHandler {
             plugin.getPlayerStates().remove(player);
     }
     
-    public void redstoneToggle(boolean batch) {
+    /*public void redstoneToggle(boolean batch) {
         if (!plugin.getCodeBlocks().containsKey(location)) {
             plugin.getMessenger();
             M.sendMessage(player, "failure.not_a_sign");
@@ -197,7 +197,7 @@ public class ClickHandler {
         }
         if (!batch)
             plugin.getPlayerStates().remove(player);
-    }
+    }*/
     
     public void removeSign(boolean batch) {
         if (!plugin.getCodeBlocks().containsKey(location)) {
