@@ -16,10 +16,12 @@ public class IntegrationServer {
     public void shutdown() {
         s.shutdown();
     }
+    
     @LuaMethod
     public void broadcast(String message) {
         s.broadcastMessage(message);
     }
+    
     @LuaMethod
     public IntegrationPlayer[] getPlayers() {
         IntegrationPlayer[] players = new IntegrationPlayer[s.getOnlinePlayers().length];
@@ -28,6 +30,7 @@ public class IntegrationServer {
         }
         return players;
     }
+    
     @LuaMethod
     public IntegrationPlayer getPlayer(String name) {
         return new IntegrationPlayer(s.getPlayer(name));

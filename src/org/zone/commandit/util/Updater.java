@@ -45,6 +45,7 @@ public class Updater {
         availableVersion = currentVersion;
         if (currentVersion.build == 0) {
             plugin.getLogger().warning("Running an in-house dev build! Auto-update disabled!");
+            return;
         }
         active = plugin.getPluginConfig().getBoolean("updater.auto-check");
         auto = plugin.getPluginConfig().getBoolean("updater.auto-install");

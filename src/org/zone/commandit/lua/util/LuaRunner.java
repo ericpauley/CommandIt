@@ -16,26 +16,27 @@ import se.krka.kahlua.vm.LuaClosure;
 
 public class LuaRunner {
     
-    private final KahluaConverterManager converterManager = new KahluaConverterManager();
+    private final KahluaConverterManager converter = new KahluaConverterManager();
     private final J2SEPlatform platform = new J2SEPlatform();
     private final KahluaTable env = platform.newEnvironment();
     private final KahluaThread thread = new KahluaThread(platform, env);
-    private final LuaCaller caller = new LuaCaller(converterManager);
-    private final LuaJavaClassExposer exposer = new LuaJavaClassExposer(converterManager, platform, env);
-    LuaClosure closure;
+    private final LuaCaller caller = new LuaCaller(converter);
+    private final LuaJavaClassExposer exposer = new LuaJavaClassExposer(converter, platform, env);
+    String code;
     
     Set<Class<?>> exposedClasses = new HashSet<Class<?>>();
     
     public LuaRunner(String code) throws IOException {
-        closure = LuaCompiler.loadstring(code, "", env);
+        this.code = code;
     }
     
     public void run() throws IOException {
+        LuaClosure closure = LuaCompiler.loadstring(code, "", env);
         caller.protectedCall(thread, closure);
     }
     
     public void expose(String name, Object o) {
-        
+        expose(o.getClass());
         env.rawset(name, o);
     }
     
