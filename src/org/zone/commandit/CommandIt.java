@@ -16,13 +16,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.config.Config;
-import org.zone.commandit.config.M;
+import org.zone.commandit.config.Messages;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
 import org.zone.commandit.util.FileLoader;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.MetricsLoader;
+import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
 import org.zone.commandit.util.Updater;
 
@@ -47,7 +48,7 @@ public class CommandIt extends JavaPlugin {
     
     private final FileLoader loader = new FileLoader(this);
     private final Config config = new Config(this);
-    private final M messenger = new M(this);
+    private final Messages messages = new Messages(this);
     private Updater updater;
     
     // Class variables
@@ -89,7 +90,7 @@ public class CommandIt extends JavaPlugin {
             perm = permission.has(player, string);
         }
         if (perm == false && notify) {
-            M.sendMessage(player, "failure.no_perms");
+            Message.sendMessage(player, "failure.no_perms");
         }
         return perm;
     }
@@ -99,8 +100,9 @@ public class CommandIt extends JavaPlugin {
      */
     public void load() {
         config.load();
-        messenger.load();
-        loader.loadFile();
+        messages.load();
+        Message.init(this);
+        cache = loader.load("blocks.yml");
         setupPermissions();
         setupEconomy();
         
@@ -111,14 +113,14 @@ public class CommandIt extends JavaPlugin {
         if (config.getBoolean("metrics.enable") == true)
             MetricsLoader.factory(this);
         else
-            M.info("metrics.opt_out");
+            Message.info("metrics.opt_out");
     }
     
     @Override
     public void onDisable() {
         if (updateTask != null)
             updateTask.cancel();
-        loader.saveFile();
+        loader.save(cache, "blocks.yml");
     }
     
     @Override
@@ -181,13 +183,6 @@ public class CommandIt extends JavaPlugin {
      */
     public FileLoader getCodeLoader() {
         return loader;
-    }
-    
-    /**
-     * @return Handler for sending messages and statuses to players
-     */
-    public M getMessenger() {
-        return messenger;
     }
     
     /**

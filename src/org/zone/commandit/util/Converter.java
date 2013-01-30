@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.config.M;
+import org.zone.commandit.util.Message;
 
 public class Converter extends FileLoader {
     
@@ -27,7 +27,7 @@ public class Converter extends FileLoader {
         	key = key.replace("text", "code");
         }
         
-        M.info("Attempting import of " + filename + "...");
+        Message.info("Attempting import of " + filename + "...");
         
         Map<Location, LuaCode> loaded = load(config);
         

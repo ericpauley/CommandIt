@@ -10,8 +10,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.config.M;
 import org.zone.commandit.handler.ClickHandler;
+import org.zone.commandit.util.Message;
 import org.zone.commandit.util.Updater;
 
 public class EventListener implements Listener {
@@ -37,7 +37,7 @@ public class EventListener implements Listener {
         }
         Location location = event.getBlock().getLocation();
         if (plugin.getCodeBlocks().containsKey(location)) {
-            M.sendMessage(event.getPlayer(), "failure.remove_first");
+            Message.sendMessage(event.getPlayer(), "failure.remove_first");
             event.setCancelled(true);
         }
     }
@@ -62,7 +62,7 @@ public class EventListener implements Listener {
         if (plugin.hasPermission(event.getPlayer(), "CommandIt.update", false)) {
             Updater u = plugin.getUpdater();
             if (u.getAvailableVersion().getBuild() > u.getCurrentVersion().getBuild()) {
-                M.sendMessage(event.getPlayer(), "update.notify", u.getAvailableVersion().toString());
+            	Message.sendMessage(event.getPlayer(), "update.notify", u.getAvailableVersion().toString());
             }
         }
     }

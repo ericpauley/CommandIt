@@ -9,7 +9,7 @@ import org.zone.commandit.CommandIt;
 
 public abstract class ConfigStore implements Map<String, String> {
     
-    private Map<String, String> config = new ConcurrentHashMap<String, String>();
+    protected Map<String, String> config = new ConcurrentHashMap<String, String>();
     protected CommandIt plugin;
     
     public ConfigStore(CommandIt plugin) {
