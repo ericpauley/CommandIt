@@ -55,14 +55,14 @@ public class Updater {
         URL dl = null;
         File fl = null;
         long t = System.nanoTime() / 1000000;
-        cs.sendMessage("Updating to version " + newVersion + "...");
+        Message.sendMessage(cs, "update.start", newVersion);
         try {
             fl = new File(plugin.getServer().getUpdateFolderFile(), pluginFile.getName());
             dl = new URL(fetch);
             FileUtils.copyURLToFile(dl, fl);
-            cs.sendMessage(String.format("Update successfully installed! (%dms)", System.nanoTime() / 1000000 - t));
+            Message.sendMessage(cs, "update.finished", ((double)System.nanoTime() / 1000000 - t)/1000);
         } catch (Exception e) {
-            cs.sendMessage("Failed to install update:" + e.getLocalizedMessage());
+            Message.sendMessage(cs, "update_fetch_failed", e);
         }
         this.currentVersion = newVersion;
     }
