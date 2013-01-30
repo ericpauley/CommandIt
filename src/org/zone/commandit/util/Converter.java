@@ -121,6 +121,16 @@ public class Converter extends FileLoader {
         		s = format.replaceFirst("#", "player.balance > "+s);
         		continue;
         	}
+        	else if (s.startsWith(">>")) {
+        		s = s.substring(1);
+        		s = format.replaceFirst("#", "isRightClick()");
+        		continue;
+        	}
+        	else if (s.startsWith("<<")) {
+        		s = s.substring(1);
+        		s = format.replaceFirst("#", "isLeftClick()");
+        		continue;
+        	}
         	else if (s.startsWith("&")) {
         		s = s.substring(1);
         		String[] perms = s.split(",");

@@ -24,8 +24,5 @@ public class Messages extends ConfigStore {
                 this.put(k, config.getString(k));
             }
         }
-        
-        // Loading defaults not needed as program will later
-     	// rewrite the file if the version is lower
     }
 }
