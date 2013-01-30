@@ -53,6 +53,8 @@ Player
 	takeItem(String item, int quantity)
 	giveItem(String item, int quantity)
 	takeMoney(int amount)
+	teleport(Float x, Float y, Float z)
+	teleport(String world, Float x, Float y, Float z)
 	
 Time
 	Methods:
