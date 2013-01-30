@@ -52,7 +52,7 @@ restriction:
 update:
   prefix: "&e"
   start: "Updating CommandIt to version &5{VERSION}{PREFIX}..."
-  finish: "Downloaded &5{SIZE}{PREFIX} KB in &5{TIME}{PREFIX} seconds. To complete the update, restart/reload your server."
+  finish: "Downloaded version &5{VERSION}{PREFIX} in &5{TIME}{PREFIX} seconds. To complete the update, restart/reload your server."
   already_downloaded: "An update to CommandIt is already waiting to be installed on reload/restart."
   up_to_date: "CommandIt is already up to date. (&5{VERSION}{PREFIX})"
   confirm_up_to_date: "CommandIt is up to date. (&5{VERSION}{PREFIX})"
