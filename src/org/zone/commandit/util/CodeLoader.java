@@ -22,27 +22,38 @@ public class CodeLoader {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Load command blocks from file
+	 * @return
+	 */
 	public Map<Location, LuaCode> loadFile() {
 		Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
+		
 		FileConfiguration config = YamlConfiguration
-				.loadConfiguration(new File(plugin.getDataFolder() + "signs.yml"));
-		ConfigurationSection data = config.getConfigurationSection("signs");
+				.loadConfiguration(new File(plugin.getDataFolder() + "blocks.yml"));
+		ConfigurationSection data = config.getConfigurationSection("blocks");
 		if (data == null) {
-			plugin.getLogger().info("No old signs found.");
+			plugin.getLogger().info("No command blocks found.");
 			return null;
 		}
+		
 		String[] locText;
 		World world;
 		int x, y, z, block;
 		Location loc;
 		int attempts = 0;
+		
 		for (String key : data.getKeys(false)) {
 			try {
+				// Attempts to count the number of entries in the file
 				attempts++;
+				
+				// Decode location
 				locText = key.split(",");
 				world = Bukkit.getWorld(locText[0]);
 				if (world == null)
-					continue;
+					throw new IllegalArgumentException("World does not exist: "
+							+ locText[0] + ".");
 				x = Integer.parseInt(locText[1]);
 				y = Integer.parseInt(locText[2]);
 				z = Integer.parseInt(locText[3]);
@@ -55,74 +66,67 @@ public class CodeLoader {
 					throw new IllegalArgumentException("Location not valid: "
 							+ loc.toString() + ".");
 
-				boolean redstone = data.getBoolean(key + ".redstone", false);
+				// Get attributes
 				String owner = data.getString(key + ".owner", null);
-				LuaCode cst = new LuaCode(owner, redstone);
-				for (Object o : data.getList(key + ".text",
+
+				LuaCode code = new LuaCode(owner);
+				for (Object o : data.getList(key + ".code",
 						new ArrayList<String>())) {
-					cst.addLine(o.toString());
+					code.addLine(o.toString());
 				}
-				cst.setEnabled(data.getBoolean(key + ".active", true));
-				Map<String, Long> timeouts = cst.getTimeouts();
+				
+				code.setEnabled(data.getBoolean(key + ".active", true));
+				
+				// Cooldowns as Player => Expiry (UNIX timestamp)
+				Map<String, Long> timeouts = code.getTimeouts();
 				ConfigurationSection cooldowns = data
 						.getConfigurationSection(key + ".cooldowns");
 				if (cooldowns == null) {
 					cooldowns = data.createSection(key + "cooldowns");
 				}
-				for (String subKey : cooldowns.getKeys(false)) {
-					timeouts.put(subKey, cooldowns.getLong(subKey));
+				for (String player : cooldowns.getKeys(false)) {
+					timeouts.put(player, cooldowns.getLong(player));
 				}
-				/*
-				 * cst.setLastUse(data.getLong(key + ".lastuse", 0));
-				 * cst.setNumUses(data.getLong(key + ".numuses", 0)); for
-				 * (Object useData : data.getList(key + ".usedata", new
-				 * ArrayList<String>())) { String[] sections =
-				 * useData.toString().split(","); OfflinePlayer user =
-				 * Bukkit.getOfflinePlayer(sections[0]); long lastUse =
-				 * Long.parseLong(sections[1]); long numUses =
-				 * Long.parseLong(sections[2]); cst.getTimeouts().put(user,
-				 * lastUse); cst.getUses().put(user, numUses); }
-				 */
-				plugin.getCodeBlocks().put(loc, cst);
+
+				plugin.getCodeBlocks().put(loc, code);
 			} catch (Exception ex) {
 				plugin.getLogger().warning(
-						"Unable to load sign " + attempts + " in signs.yml. "
+						"Unable to load command block " + attempts + ". "
 								+ ex.getMessage());
 				ex.printStackTrace();
 			}
 		}
 		plugin.getLogger().info(
-				"Successfully loaded " + plugin.getCodeBlocks().size() + " signs");
+				"Successfully loaded " + plugin.getCodeBlocks().size() + " command blocks");
 		return loaded;
 	}
 
+	/**
+	 * Save command blocks to file
+	 * @return
+	 */
 	public void saveFile() {
 		FileConfiguration config = new YamlConfiguration();
-		ConfigurationSection data = config.createSection("signs");
+		ConfigurationSection data = config.createSection("blocks");
+		
 		for (Map.Entry<Location, LuaCode> sign : plugin.getCodeBlocks().entrySet()) {
 			Location loc = sign.getKey();
-			LuaCode cst = sign.getValue();
-			cst.trim();
+			LuaCode code = sign.getValue();
+			code.trim();
+			
 			String key = loc.getWorld().getName() + "," + loc.getBlockX() + ","
 					+ loc.getBlockY() + "," + loc.getBlockZ();
-			ConfigurationSection signData = data.createSection(key);
-			signData.set("redstone", cst.isRedstone());
-			signData.set("owner", cst.getOwner());
-			signData.set("text", cst.getText());
-			signData.set("active", cst.isEnabled());
-			signData.createSection("cooldowns", cst.getTimeouts());
-			/*
-			 * data.set(key + ".lastuse", cst.getLastUse()); data.set(key +
-			 * ".numuses", cst.getNumUses()); List<String> useData = new
-			 * ArrayList<String>(cst.getUses().size()); for (OfflinePlayer user
-			 * : cst.getTimeouts().keySet()) { useData.add(user.getName() + ","
-			 * + cst.getLastUse(user) + "," + cst.getUses(user)); } data.set(key
-			 * + ".usedata", useData);
-			 */
+			
+			ConfigurationSection block = data.createSection(key);
+			block.set("owner", code.getOwner());
+			block.set("code", code.getLines());
+			block.set("active", code.isEnabled());
+			block.createSection("cooldowns", code.getTimeouts());
+			
 			try {
-				config.save(new File(plugin.getDataFolder(), "signs.yml"));
+				config.save(new File(plugin.getDataFolder(), "blocks.yml"));
 				plugin.getLogger().info(
-						plugin.getCodeBlocks().size() + " signs saved");
+						plugin.getCodeBlocks().size() + " command blocks saved");
 			} catch (IOException e) {
 				plugin.getLogger().severe("Failed to save CommandIt");
 				e.printStackTrace();

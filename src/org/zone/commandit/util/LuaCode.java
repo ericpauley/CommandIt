@@ -10,30 +10,28 @@ public class LuaCode implements Iterable<String> {
 
 	private boolean enabled = true;
 	private String owner;
-	private boolean redstone = false;
-	private List<String> text;
+	private List<String> code;
 	private final Map<String, Long> timeouts = new HashMap<String, Long>();
 
-	public LuaCode(String owner, boolean redstone) {
+	public LuaCode(String owner) {
 		this.owner = owner;
-		text = new ArrayList<String>();
-		this.redstone = redstone;
+		code = new ArrayList<String>();
 	}
 
 	public void addLine(String string) {
-		text.add(string);
+		code.add(string);
 	}
 
 	public LuaCode clone(String owner) {
-		LuaCode cst = new LuaCode(owner, redstone);
-		for (String s : text) {
-			cst.getText().add(s);
+		LuaCode code = new LuaCode(owner);
+		for (String s : code) {
+			code.getLines().add(s);
 		}
-		return cst;
+		return code;
 	}
 
 	public int count() {
-		int size = text.size();
+		int size = code.size();
 		// Count from last to first, stop whenever a non-blank
 		// is found, or if the size hits 'zero'
 		while (size > 0 && getLine(size) == "")
@@ -43,15 +41,15 @@ public class LuaCode implements Iterable<String> {
 
 	// Internal list is ZERO indexed, one indexed externally only
 	public String getLine(int index) {
-		return text.get(index - 1);
+		return code.get(index - 1);
+	}
+	
+	public List<String> getLines() {
+		return this.code;
 	}
 
 	public String getOwner() {
 		return owner;
-	}
-
-	public List<String> getText() {
-		return this.text;
 	}
 
 	public Map<String, Long> getTimeouts() {
@@ -62,18 +60,14 @@ public class LuaCode implements Iterable<String> {
 		return enabled;
 	}
 
-	public boolean isRedstone() {
-		return redstone;
-	}
-
 	@Override
 	public Iterator<String> iterator() {
-		return text.iterator();
+		return code.iterator();
 	}
 
 	public void removeLine(int index) {
-		if (index >= 1 && index <= text.size()) {
-			text.remove(index - 1);
+		if (index >= 1 && index <= code.size()) {
+			code.remove(index - 1);
 		}
 	}
 
@@ -82,28 +76,26 @@ public class LuaCode implements Iterable<String> {
 	}
 
 	public void setLine(int index, String line) {
-		while (text.size() < index) {
-			text.add("");
+		while (code.size() < index) {
+			code.add("");
 		}
-		text.set(index - 1, line);
-	}
-
-	public void setRedstone(boolean redstone) {
-		this.redstone = redstone;
+		code.set(index - 1, line);
 	}
 
 	@Override
 	public String toString() {
 		String string = "";
-
+		for (String s : code) {
+			string += s;
+		}
 		return string;
 	}
 
 	public void trim() {
 		int blank;
-		while ((blank = text.lastIndexOf("")) >= 0)
-			text.remove(blank);
-		for (String line : text) {
+		while ((blank = code.lastIndexOf("")) >= 0)
+			code.remove(blank);
+		for (String line : code) {
 			line.trim();
 		}
 	}
