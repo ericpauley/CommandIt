@@ -11,6 +11,7 @@ this
 	world - String
 	
 	Methods:
+	//Note: These will most likely be lua shortcuts to player/server methods.
 	run(String command)
 	run(String command, bool visible)
 	super(String command)
@@ -20,7 +21,7 @@ this
 	console(String command)
 	console(String command, bool visible)
 	text(String message)
-	delay(int seconds)
+	delay(int seconds) //This may be hard to implement
 	random() - Float
 	random(int min, int max) - Integer
 	randomLoc() - String
@@ -66,3 +67,4 @@ Special characters:
 "Text {player.money} more text" allow variables to be used
     This gets converted before Lua parsing to "Text "..player.money.." more text"
     { } can be escaped with \{ \}
+    //This may also be hard to implement. Will we juts do a dumb replace and hope players don't do something like player.sendMessage({player.money})?
