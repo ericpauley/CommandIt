@@ -65,7 +65,7 @@ public class M extends ConfigStore {
             List<String> tags = new ArrayList<String>();
             Matcher m = Pattern.compile("\\{\\w*\\}").matcher(defaultValue);
             while (m.find()) {
-                if(!m.group().equalsIgnoreCase("{PREFIX}")&&!tags.contains(m.group().toUpperCase())){
+                if (!m.group().equalsIgnoreCase("{PREFIX}") && !tags.contains(m.group().toUpperCase())) {
                     tags.add(m.group().toUpperCase());
                 }
             }
@@ -94,11 +94,11 @@ public class M extends ConfigStore {
         }
     }
     
-    public static void info(String messageName, String... replacements){
+    public static void info(String messageName, String... replacements) {
         plugin.getLogger().info(parseRaw(messageName, replacements));
     }
     
-    public static void warning(String messageName, String... replacements){
+    public static void warning(String messageName, String... replacements) {
         plugin.getLogger().warning(parseRaw(messageName, replacements));
     }
 }

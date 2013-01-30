@@ -15,7 +15,9 @@ public class IntegrationPlayer {
     
     /**
      * Sends the player a message
-     * @param message The message to send
+     * 
+     * @param message
+     *            The message to send
      */
     @LuaMethod
     public void sendMessage(String message) {
@@ -24,9 +26,13 @@ public class IntegrationPlayer {
     
     /**
      * Teleports the player to a location
-     * @param x The X coordinate to teleport the player to
-     * @param y The Y coordinate to teleport the player to
-     * @param z The Z coordinate to teleport the player to
+     * 
+     * @param x
+     *            The X coordinate to teleport the player to
+     * @param y
+     *            The Y coordinate to teleport the player to
+     * @param z
+     *            The Z coordinate to teleport the player to
      */
     @LuaMethod
     public void teleport(double x, double y, double z) {

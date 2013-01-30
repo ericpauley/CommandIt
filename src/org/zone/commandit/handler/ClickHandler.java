@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.config.M;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.PlayerState;
 
@@ -23,19 +24,22 @@ public class ClickHandler {
     public void copySign() {
         LuaCode code = plugin.getCodeBlocks().get(location);
         if (code == null) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         LuaCode clone = plugin.getCodeBlocks().get(location).clone(player.getName());
         plugin.getPlayerCode().put(player, clone);
         readSign(true);
-        plugin.getMessenger().sendMessage(player, "success.copied");
+        plugin.getMessenger();
+        M.sendMessage(player, "success.copied");
         plugin.getPlayerStates().put(player, PlayerState.ENABLE);
     }
     
     public void createSign(boolean batch) {
         if (plugin.getCodeBlocks().containsKey(location)) {
-            plugin.getMessenger().sendMessage(player, "failure.already_enabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.already_enabled");
             return;
         }
         LuaCode code = plugin.getPlayerCode().get(player);
@@ -43,9 +47,11 @@ public class ClickHandler {
         try {
             code.trim();
             plugin.getCodeBlocks().put(location, code.clone(player.getName()));
-            plugin.getMessenger().sendMessage(player, "success.enabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "success.enabled");
         } catch (Exception e) {
-            plugin.getMessenger().sendMessage(player, "failure.wrong_syntax");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.wrong_syntax");
         }
         
         if (!batch) {
@@ -57,10 +63,12 @@ public class ClickHandler {
     public void editSign() {
         LuaCode code = plugin.getCodeBlocks().get(location);
         if (code == null) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        plugin.getMessenger().sendMessage(player, "progress.edit_started");
+        plugin.getMessenger();
+        M.sendMessage(player, "progress.edit_started");
         plugin.getPlayerCode().put(player, code);
         plugin.getPlayerStates().put(player, PlayerState.EDIT);
     }
@@ -68,7 +76,8 @@ public class ClickHandler {
     public void insert(boolean batch) {
         LuaCode currentText = plugin.getCodeBlocks().get(location);
         if (currentText == null) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         LuaCode newText = plugin.getPlayerCode().get(player);
@@ -83,7 +92,8 @@ public class ClickHandler {
         }
         currentText.trim();
         
-        plugin.getMessenger().sendMessage(player, "success.done_editing");
+        plugin.getMessenger();
+        M.sendMessage(player, "success.done_editing");
         if (!batch) {
             plugin.getPlayerStates().remove(player);
             plugin.getPlayerCode().remove(player);
@@ -149,13 +159,15 @@ public class ClickHandler {
     public void readSign(boolean batch) {
         LuaCode code = plugin.getCodeBlocks().get(location);
         if (code == null) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         int i = 1;
         for (String line : code) {
             if (!line.equals("")) {
-                plugin.getMessenger().sendRaw(player, "success.line_print", "" + i, line);
+                plugin.getMessenger();
+                M.sendRaw(player, "success.line_print", "" + i, line);
             }
             i++;
         }
@@ -165,7 +177,8 @@ public class ClickHandler {
     
     public void redstoneToggle(boolean batch) {
         if (!plugin.getCodeBlocks().containsKey(location)) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         LuaCode code = plugin.getCodeBlocks().get(location);
@@ -174,11 +187,13 @@ public class ClickHandler {
         if (enabled) {
             code.setRedstone(false);
             plugin.getCodeBlocks().put(location, code);
-            plugin.getMessenger().sendMessage(player, "success.redstone_disabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "success.redstone_disabled");
         } else {
             code.setRedstone(true);
             plugin.getCodeBlocks().put(location, code);
-            plugin.getMessenger().sendMessage(player, "success.redstone_enabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "success.redstone_enabled");
         }
         if (!batch)
             plugin.getPlayerStates().remove(player);
@@ -186,15 +201,18 @@ public class ClickHandler {
     
     public void removeSign(boolean batch) {
         if (!plugin.getCodeBlocks().containsKey(location)) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         plugin.getCodeBlocks().remove(location);
-        plugin.getMessenger().sendMessage(player, "success.removed");
+        plugin.getMessenger();
+        M.sendMessage(player, "success.removed");
         if (!batch) {
             if (plugin.getPlayerCode().containsKey(player)) {
                 plugin.getPlayerStates().put(player, PlayerState.ENABLE);
-                plugin.getMessenger().sendMessage(player, "information.code_in_clipboard");
+                plugin.getMessenger();
+                M.sendMessage(player, "information.code_in_clipboard");
             } else {
                 plugin.getPlayerStates().remove(player);
             }
@@ -203,7 +221,8 @@ public class ClickHandler {
     
     public void toggleSign(boolean batch) {
         if (!plugin.getCodeBlocks().containsKey(location)) {
-            plugin.getMessenger().sendMessage(player, "failure.not_a_sign");
+            plugin.getMessenger();
+            M.sendMessage(player, "failure.not_a_sign");
             return;
         }
         LuaCode code = plugin.getCodeBlocks().get(location);
@@ -212,11 +231,13 @@ public class ClickHandler {
         if (enabled) {
             code.setEnabled(false);
             plugin.getCodeBlocks().put(location, code);
-            plugin.getMessenger().sendMessage(player, "success.disabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "success.disabled");
         } else {
             code.setEnabled(true);
             plugin.getCodeBlocks().put(location, code);
-            plugin.getMessenger().sendMessage(player, "success.enabled");
+            plugin.getMessenger();
+            M.sendMessage(player, "success.enabled");
         }
         if (!batch)
             plugin.getPlayerStates().remove(player);

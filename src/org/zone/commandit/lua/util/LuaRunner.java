@@ -40,11 +40,11 @@ public class LuaRunner {
         env.rawset(name, o);
     }
     
-    public void expose(Class<?> clazz){
+    public void expose(Class<?> clazz) {
         if (!exposedClasses.contains(clazz)) {
             exposer.exposeClass(clazz);
             exposedClasses.add(clazz);
-            for(Method m:clazz.getMethods()){
+            for (Method m : clazz.getMethods()) {
                 expose(m.getReturnType());
             }
         }

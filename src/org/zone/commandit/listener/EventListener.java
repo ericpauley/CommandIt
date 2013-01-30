@@ -62,15 +62,14 @@ public class EventListener implements Listener {
     }
     
     @EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (plugin.hasPermission(event.getPlayer(), "CommandIt.update",
-				false)) {
-		    Updater u = plugin.getUpdater();
-			if(u.getAvailableVersion().getBuild()>u.getCurrentVersion().getBuild()){
-			    M.sendMessage(event.getPlayer(), "update.notify", u.getAvailableVersion().toString());
-			}
-		}
-	}
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (plugin.hasPermission(event.getPlayer(), "CommandIt.update", false)) {
+            Updater u = plugin.getUpdater();
+            if (u.getAvailableVersion().getBuild() > u.getCurrentVersion().getBuild()) {
+                M.sendMessage(event.getPlayer(), "update.notify", u.getAvailableVersion().toString());
+            }
+        }
+    }
     
     @EventHandler
     public void onRedstoneChange(BlockRedstoneEvent event) {
