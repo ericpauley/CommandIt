@@ -24,7 +24,7 @@ public class Message {
 		return messagesInstance;
 	}
 
-	public static String parseMessage(String message, String... replacements) {
+	public static String parseMessage(String message, Object... replacements) {
 		Messages messages = getMessagesInstance();
 		String raw = parseRaw(message, replacements);
 		String prefix = messages.get("prefix");
@@ -35,7 +35,7 @@ public class Message {
 		}
 	}
 
-	public static String parseRaw(String messageName, String... replacements) {
+	public static String parseRaw(String messageName, Object... replacements) {
 		Messages messages = getMessagesInstance();
 		messageName = messageName.toLowerCase();
 		String prefix = messages.get(messageName.split("\\.")[0] + ".prefix");
@@ -44,7 +44,7 @@ public class Message {
 			List<String> tags = new ArrayList<String>();
 			for (int i = 0; i < replacements.length; i++) {
 				raw = raw.replaceAll("(?iu)\\{" + tags.get(i) + "\\}",
-						replacements[i]);
+						replacements[i].toString());
 			}
 			raw = raw.replaceAll("(?iu)\\{PREFIX\\}",
 					((prefix != null) ? prefix : ""));
@@ -56,28 +56,28 @@ public class Message {
 	}
 
 	public static void sendMessage(CommandSender cs, String messageName,
-			String... replacements) {
+			Object... replacements) {
 		if (cs != null) {
 			cs.sendMessage(parseMessage(messageName, replacements));
 		}
 	}
 
 	public static void sendRaw(CommandSender cs, String messageName,
-			String... replacements) {
+			Object... replacements) {
 		if (cs != null) {
 			cs.sendMessage(parseRaw(messageName, replacements));
 		}
 	}
 
-	public static void info(String messageName, String... replacements) {
+	public static void info(String messageName, Object... replacements) {
 		plugin.getLogger().info(parseRaw(messageName, replacements));
 	}
 
-	public static void warning(String messageName, String... replacements) {
+	public static void warning(String messageName, Object... replacements) {
 		plugin.getLogger().warning(parseRaw(messageName, replacements));
 	}
 
-	public static void severe(String messageName, String... replacements) {
+	public static void severe(String messageName, Object... replacements) {
 		plugin.getLogger().severe(parseRaw(messageName, replacements));
 	}
 }
