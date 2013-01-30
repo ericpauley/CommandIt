@@ -3,7 +3,12 @@ LUA SCRIPT SPECIFICATION
 this
 	Fields:
 	player
+	nearest
 	time
+	x
+	y
+	z
+	world
 	
 	Methods:
 	run(String command)
@@ -19,11 +24,19 @@ this
 	random(int min, int max)
 	randomLoc()
 	randomLoc(int maxX, int maxY, int maxZ)
+	randomPlayer()
 	
 player
 	Fields:
+	name
+	ip
 	money
+	formatted
 	timeout
+	x
+	y
+	z
+	world
 
 	Methods:
 	hasPerm(String permission)
@@ -40,3 +53,8 @@ time
 	asTicks()
 	toString()
 	
+	
+Special characters:
+"Text {player.money} more text" allow variables to be used
+    This gets converted before Lua parsing to "Text "..player.money.." more text"
+    { } can be escaped with \{ \}
