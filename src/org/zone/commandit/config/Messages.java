@@ -6,11 +6,8 @@ import org.zone.commandit.util.YamlLoader;
 
 public class Messages extends ConfigStore {
     
-    private CommandIt plugin;
-    
     public Messages(CommandIt plugin) {
         super(plugin);
-        this.plugin = plugin;
     }
     
     /**

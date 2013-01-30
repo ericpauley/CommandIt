@@ -22,9 +22,9 @@ public class YamlLoader {
         File f = new File(plugin.getDataFolder(), filename);
         
         // Load the included file
-        FileConfiguration included = YamlConfiguration.loadConfiguration(plugin.getResource(filename));
+        FileConfiguration included = YamlConfiguration.loadConfiguration(plugin.getResource("res" + filename));
         
-        // Write the included file if an external one doens't exist
+        // Write the included file if an external one doesn't exist
         if (!f.exists()) {
             plugin.getLogger().info("Creating default " + filename + ".");
             plugin.saveResource(filename, true);

@@ -19,7 +19,7 @@ public class Converter extends FileLoader {
      * Load CommandSigns from file
      */
     public Map<Location, LuaCode> load(String filename) {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(filename));
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + filename));
         
         // Rename signs.* to blocks.* and .text to .code
         for (String key : config.getKeys(true)) {
