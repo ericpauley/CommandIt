@@ -13,63 +13,62 @@ public class MetricsLoader {
         try {
             Metrics metrics = new Metrics(plugin);
             
-            Graph g = metrics.createGraph("Number of CommandSigns");
-            g.addPlotter(new Plotter() {
+            Graph total = metrics.createGraph("Number of Lua Scripts");
+            total.addPlotter(new Plotter() {
                 
                 @Override
                 public int getValue() {
                     return plugin.getCodeBlocks().size();
                 }
             });
-            Graph g3 = metrics.createGraph("CommandSigns Version");
-            g3.addPlotter(new Plotter(plugin.getDescription().getVersion()) {
-                
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            Graph g2 = metrics.createGraph("Super Signs Used");
-            g2.addPlotter(new Plotter("Permission") {
+            Graph commands = metrics.createGraph("Command Method Breakdown");
+            commands.addPlotter(new Plotter("Regular") {
                 
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode cst : plugin.getCodeBlocks().values()) {
-                        for (String s : cst) {
-                            if (s.startsWith("/*") || s.startsWith("!/*")) {
-                                number++;
-                            }
+                    for (LuaCode code : plugin.getCodeBlocks().values()) {
+                        if (code.toString().contains("run(")) {
+                            number++;
                         }
                     }
                     return number;
                 }
             });
-            g2.addPlotter(new Plotter("Op") {
+            commands.addPlotter(new Plotter("Sudo") {
                 
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode cst : plugin.getCodeBlocks().values()) {
-                        for (String s : cst) {
-                            if (s.startsWith("/^") || s.startsWith("!/^")) {
-                                number++;
-                            }
+                    for (LuaCode code : plugin.getCodeBlocks().values()) {
+                        if (code.toString().contains("sudo(")) {
+                            number++;
                         }
                     }
                     return number;
                 }
             });
-            g2.addPlotter(new Plotter("Console") {
+            commands.addPlotter(new Plotter("Op") {
                 
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode cst : plugin.getCodeBlocks().values()) {
-                        for (String s : cst) {
-                            if (s.startsWith("/#") || s.startsWith("!/#")) {
-                                number++;
-                            }
+                    for (LuaCode code : plugin.getCodeBlocks().values()) {
+                        if (code.toString().contains("op(")) {
+                            number++;
+                        }
+                    }
+                    return number;
+                }
+            });
+            commands.addPlotter(new Plotter("Console") {
+                
+                @Override
+                public int getValue() {
+                    int number = 0;
+                    for (LuaCode code : plugin.getCodeBlocks().values()) {
+                        if (code.toString().contains("console(")) {
+                            number++;
                         }
                     }
                     return number;
