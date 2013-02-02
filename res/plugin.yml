@@ -72,31 +72,35 @@ permissions:
         description: Reloads CommandIt and all configuration
         default: false;
     commandit.use.*:
-        description: Gives access to CommandIt sign use
+        description: Gives access to CommandIt use
         default: true
         children:
             commandit.use.regular: true
-            commandit.use.super: true
+            commandit.use.sudo: true
+            commandit.use.op: true
+    commandit.use.regular:
+        description: Allows you to use a regular command block
+        default: true
+    commandit.use.sudo:
+        description: Allows you to use a sudo command block
+        default: false
+    commandit.use.op:
+        description: Allows you to use an op command block
+        default: false
     commandit.create.regular:
         description: Allows you to create a regular command block
         default: false
-    commandit.create.super:
+    commandit.create.sudo:
         description: Allows you to create a super command block
-        default: false
-    commandit.create.redstone:
-        description: Allows you to create redstone-activated signs
         default: false
     commandisgns.create.op:
         description: Allows you to create op-level CommandIt
         default: false
+    commandit.create.redstone:
+        description: Allows you to create redstone-activated signs
+        default: false
     commandit.remove:
         description: Allows you to remove a command block
-        default: false
-    commandit.use.regular:
-        description: Allows you to use a regular command block
-        default: false
-    commandit.use.super:
-        description: Allows you to use a super command block
         default: false
     commandit.group.*:
         description: Allows you to use all group commands

@@ -3,30 +3,40 @@ LUA SCRIPT SPECIFICATION
 this
 	Fields:
 	player - Player
-	nearest - Player
-	time - Time
+	server - Server
 	x - Decimal
 	y - Decimal
 	z - Decimal
 	world - String
 	
 	Methods:
-	//Note: These will most likely be lua shortcuts to player/server methods.
+	// Note: The command methods default to player.run()
 	run(String command)
 	run(String command, bool visible)
-	super(String command)
-	super(String command, bool visible)
+
+	sudo(String command)
+	sudo(String command, bool visible)
 	op(String command)
 	op(String command, bool visible)
+
 	console(String command)
 	console(String command, bool visible)
+
 	text(String message)
 	delay(int seconds) //This may be hard to implement
+	
+	getPlayer() - Player
+	getServer() - Server
+	getNearest() - Player
+	getTime() - Time
+	
 	random() - Float
 	random(int min, int max) - Integer
 	randomLoc() - String
 	randomLoc(int maxX, int maxY, int maxZ) - String
+	randomLoc(int maxX, int maxY, int maxZ, bool relative) - String
 	randomPlayer() - String
+	
 	isLeftClick() - Boolean
 	isRightClick() - Boolean
 	isPhysical() - Boolean
@@ -57,11 +67,18 @@ Player
 	teleport(Float x, Float y, Float z)
 	teleport(String world, Float x, Float y, Float z)
 	
+Server
+	Methods:
+	broadcast(String message)
+	getPlayer(String name) - Player
+	getPlayers() - Player[]
+	run(String command)
+	shutdown()
+	
 Time
 	Methods:
 	asTicks() - Integer
 	toString() - String
-	
 	
 Special characters:
 "Text {player.money} more text" allow variables to be used
