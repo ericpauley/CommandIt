@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
 
-public class FileLoader implements Loader {
+public class FileLoader {
     
     protected CommandIt plugin;
     
@@ -25,7 +25,6 @@ public class FileLoader implements Loader {
     /**
      * Load command blocks from files
      */
-    @Override
     public Map<Location, LuaCode> load(String filename) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + filename));
         return load(config);
@@ -34,7 +33,6 @@ public class FileLoader implements Loader {
     /**
      * Save command blocks to file
      */
-    @Override
     public void save(Map<Location, LuaCode> cache, String filename) {
         FileConfiguration config = new YamlConfiguration();
         ConfigurationSection data = config.createSection("blocks");
