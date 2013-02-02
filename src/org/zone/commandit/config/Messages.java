@@ -5,21 +5,22 @@ import org.zone.commandit.CommandIt;
 import org.zone.commandit.util.YamlLoader;
 
 public class Messages extends ConfigStore {
-
-	public Messages(CommandIt plugin) {
-		super(plugin);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void load() {
-		Configuration config = YamlLoader.loadResource(plugin, "messages.yml");
-
-		for (String k : config.getKeys(true)) {
-			if (!config.isConfigurationSection(k)) {
-				this.put(k, config.getString(k));
-			}
-		}
-	}
+    
+    public Messages(CommandIt plugin) {
+        super(plugin);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void load() {
+        Configuration config = YamlLoader.loadResource(plugin, "messages.yml");
+        
+        for (String k : config.getKeys(true)) {
+            if (!config.isConfigurationSection(k)) {
+                this.put(k, config.getString(k));
+            }
+        }
+    }
 }
