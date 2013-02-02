@@ -69,6 +69,20 @@ public abstract class ConfigStore implements Map<String, String> {
         }
     }
     
+    /**
+     * Gets the string value mapped to the given key.
+     * 
+     * @param key
+     * @return
+     */
+    public String getString(Object key) {
+        try {
+            return this.get(key).toString();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
     @Override
     public boolean isEmpty() {
         return config.isEmpty();

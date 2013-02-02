@@ -1,5 +1,27 @@
 config-version: "@VERSION@"
 
+# If you prefer using a database over YAML, you can enable SQL support
+database:
+  enable: false
+  
+  # Acceptable drivers:
+  # - com.mysql.jdbc.Driver
+  # - org.sqlite.JDBC
+  driver: com.mysql.jdbc.Driver
+  
+  # Acceptable isolation modes:
+  # - SERIALIZABLE
+  # - REPEATABLE_READ
+  # - READ_COMMITTED
+  # - READ_UNCOMMITTED
+  isolation: SERIALIZABLE
+  
+  username: {USERNAME}
+  password: {PASSWORD}
+  
+  # URL Example (default): jdbc:mysql://127.0.0.1:3306/minecraft
+  url: jdbc:mysql://{IP}:{PORT}/{DATABASENAME}
+
 # For updating the plugin automatically
 updater:
   auto-check: true

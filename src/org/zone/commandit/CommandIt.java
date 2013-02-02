@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.config.Config;
 import org.zone.commandit.config.Messages;
+import org.zone.commandit.config.SqlBlocks;
+import org.zone.commandit.config.YamlBlocks;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
@@ -97,10 +99,16 @@ public class CommandIt extends JavaPlugin {
         config.load();
         messages.load();
         Message.init(this);
-        cache = loader.load("blocks.yml");
         setupLuaLoader();
         setupPermissions();
         setupEconomy();
+        
+        if (config.getBoolean("sql.enabled"))
+            cache = new SqlBlocks();
+        else
+            cache = new YamlBlocks();
+        
+        cache.putAll(loader.load("blocks.yml"));
         
         updater = new Updater(this, this.getFile());
         if (config.getBoolean("updater.auto-check") == true)
