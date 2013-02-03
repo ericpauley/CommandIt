@@ -4,31 +4,39 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.zone.commandit.CommandIt;
+import org.zone.commandit.handler.CommandBlockInteractEvent;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationPlayer {
     
+    protected CommandBlockInteractEvent event;
     protected Player player;
     protected Permission perms;
-    protected Server server;
     public double x, y, z;
     
     /**
      * Create a new instance of a player for Lua interpretation.
-     * @param player
-     * @param plugin
+     * @param e
      */
-    public IntegrationPlayer(Player player, CommandIt plugin) {
+    public IntegrationPlayer(CommandBlockInteractEvent e) {
+        event = e;
+        player = e.getPlayer();
+        perms = e.getPlugin().getPermissionHandler();
+        x = player.getLocation().getX();
+        y = player.getLocation().getY();
+        z = player.getLocation().getZ();
+    }
+    
+    /**
+     * Create a new instance of a player for Lua interpretation.
+     * @param e
+     * @param player Player separate to the caller of the event
+     */
+    public IntegrationPlayer(CommandBlockInteractEvent e, Player player) {
+        this(e);
         this.player = player;
-        this.perms = plugin.getPermissionHandler();
-        this.server = plugin.getServer();
-        this.x = player.getLocation().getX();
-        this.y = player.getLocation().getY();
-        this.z = player.getLocation().getZ();
     }
     
     /**
@@ -133,6 +141,6 @@ public class IntegrationPlayer {
      */
     @LuaMethod
     public void teleport(String world, double x, double y, double z) {
-        player.teleport(new Location(server.getWorld(world), x, y, z));
+        player.teleport(new Location(event.getPlugin().getServer().getWorld(world), x, y, z));
     }
 }

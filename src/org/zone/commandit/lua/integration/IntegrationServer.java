@@ -2,18 +2,18 @@ package org.zone.commandit.lua.integration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.zone.commandit.CommandIt;
+import org.zone.commandit.handler.CommandBlockInteractEvent;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationServer {
     
+    protected CommandBlockInteractEvent event;
     protected Server server;
-    protected CommandIt plugin;
     
-    public IntegrationServer(CommandIt plugin) {
-        this.server = plugin.getServer();
-        this.plugin = plugin;
+    public IntegrationServer(CommandBlockInteractEvent e) {
+        event = e;
+        server = e.getPlugin().getServer();
     }
     
     /**
@@ -31,7 +31,7 @@ public class IntegrationServer {
      */
     @LuaMethod
     public IntegrationPlayer getPlayer(String name) {
-        return new IntegrationPlayer(server.getPlayer(name), plugin);
+        return new IntegrationPlayer(event);
     }
     
     /**
@@ -41,7 +41,7 @@ public class IntegrationServer {
     public IntegrationPlayer[] getPlayers() {
         IntegrationPlayer[] players = new IntegrationPlayer[server.getOnlinePlayers().length];
         for (int i = 0; i < players.length; i++) {
-            players[i] = new IntegrationPlayer(server.getOnlinePlayers()[i], plugin);
+            players[i] = new IntegrationPlayer(event, server.getOnlinePlayers()[i]);
         }
         return players;
     }

@@ -8,6 +8,7 @@ import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationBase {
     
+    protected CommandBlockInteractEvent event;
     public IntegrationPlayer player;
     public IntegrationServer server;
     public int x, y, z;
@@ -18,8 +19,9 @@ public class IntegrationBase {
      * @param e Event triggered by interaction with a command block
      */
     public IntegrationBase(CommandBlockInteractEvent e) {
-        player = new IntegrationPlayer(e.getPlayer(), e.getPlugin());
-        server = new IntegrationServer(e.getPlugin());
+        event = e;
+        player = new IntegrationPlayer(e);
+        server = new IntegrationServer(e);
         x = e.getClickedBlock().getX();
         y = e.getClickedBlock().getY();
         z = e.getClickedBlock().getZ();
