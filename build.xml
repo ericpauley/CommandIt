@@ -14,6 +14,8 @@
 	</condition>
 	<property name="build" value="DEV" />
 
+	<taskdef name="JarOpt" classname="org.cmc.jaroptimizer.JarOptTask" classpath="${lib}/jaropt.jar" />
+
 	<target name="init" depends="clean" description="create necessary folders">
 		<mkdir dir="${bin}" />
 	</target>
@@ -33,11 +35,15 @@
 		<copy todir="${bin}" filtering="true">
 			<fileset dir="${res}" />
 		</copy>
-		<jar jarfile="${bin}/CommandIt.jar" basedir="${bin}" encoding="Cp1252">
+		<jar jarfile="${bin}/CommandIt-tmp.jar" basedir="${bin}" encoding="Cp1252">
 			<zipfileset dir="." includes="*.lbc" />
 			<zipfileset dir="." includes="LICENSE.txt" />
 			<zipgroupfileset dir="${lib}" includes="export/*" />
 		</jar>
+		<JarOpt src="${bin}/CommandIt-tmp.jar" dst="${bin}/CommandIt.jar" stripNonClassFiles="false" verbose="false" printDependencies="false">
+			<includePattern>org.zone.commandit.*</includePattern>
+		</JarOpt  >
+		<delete file="jaropt.log" />
 	</target>
 	<target name="clean" description="clean up">
 		<delete dir="${bin}" />
