@@ -11,73 +11,133 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        
+        /*
+         * TRUNCATE TABLE blocks, code, cooldowns;
+         */
     }
     
     @Override
     public boolean containsKey(Object key) {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT * FROM blocks
+         * WHERE location = 'key'
+         * LIMIT 1
+         */
         return false;
     }
     
     @Override
     public boolean containsValue(Object value) {
-        // TODO Auto-generated method stub
+        /*
+         * Too hideous
+         */
         return false;
     }
     
     @Override
     public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT * FROM blocks
+         * INNER JOIN code
+         *      ON blocks.location = code.location
+         * INNER JOIN cooldowns
+         *      ON blocks.location = cooldowns.location
+         */
         return null;
     }
     
     @Override
     public LuaCode get(Object key) {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT * FROM blocks
+         * WHERE blocks.location = 'key'
+         * INNER JOIN code
+         *      ON blocks.location = code.location
+         * INNER JOIN cooldowns
+         *      ON blocks.location = cooldowns.location
+         */
         return null;
     }
     
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT * FROM blocks
+         */
         return false;
     }
     
     @Override
     public Set<Location> keySet() {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT location FROM blocks
+         * INNER JOIN code
+         *      ON blocks.location = code.location
+         * INNER JOIN cooldowns
+         *      ON blocks.location = cooldowns.location
+         */
         return null;
     }
     
     @Override
     public LuaCode put(Location key, LuaCode value) {
-        // TODO Auto-generated method stub
+        /*
+         * INSERT INTO blocks VALUES(
+         *      key,
+         *      value.getOwner,
+         *      value.isEnabled
+         * );
+         * for (String line : value.getLines()) {
+         *      INSERT INTO code VALUES(
+         *          key,
+         *          line
+         *      );
+         * }
+         * for (Entry<String, Long> timeout : value.getTimeouts()) {
+         *      INSERT INTO code VALUES(
+         *          key,
+         *          timeout.getLey(),
+         *          timeout.getValue()
+         *      );
+         * }
+         */
         return null;
     }
     
     @Override
     public void putAll(Map<? extends Location, ? extends LuaCode> m) {
-        // TODO Auto-generated method stub
-        
+        for (Entry<? extends Location, ? extends LuaCode> e : m.entrySet()) {
+            put(e.getKey(), e.getValue());
+        }
     }
     
     @Override
     public LuaCode remove(Object key) {
-        // TODO Auto-generated method stub
+        /*
+         * DELETE FROM blocks
+         * WHERE location = key;
+         */
         return null;
     }
     
     @Override
     public int size() {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT COUNT(location) FROM blocks
+         */
         return 0;
     }
     
     @Override
     public Collection<LuaCode> values() {
-        // TODO Auto-generated method stub
+        /*
+         * SELECT * FROM blocks
+         * WHERE blocks.location = 'key'
+         * INNER JOIN code
+         *      ON blocks.location = code.location
+         * INNER JOIN cooldowns
+         *      ON blocks.location = cooldowns.location
+         */
         return null;
     }
     
