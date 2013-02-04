@@ -33,9 +33,9 @@ this
 	random() - Float
 	random(int min, int max) - Integer
 	randomLoc() - String
+	randomLoc(int distance) - String
 	randomLoc(int maxX, int maxY, int maxZ) - String
-	randomLoc(int maxX, int maxY, int maxZ, bool relative) - String
-	randomPlayer() - String
+	randomPlayer() - Player
 	
 	isLeftClick() - Boolean
 	isRightClick() - Boolean

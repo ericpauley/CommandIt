@@ -11,7 +11,7 @@ public class IntegrationServer {
     protected CommandBlockInteractEvent event;
     protected Server server;
     
-    public IntegrationServer(CommandBlockInteractEvent e) {
+    public IntegrationServer(final CommandBlockInteractEvent e) {
         event = e;
         server = e.getPlugin().getServer();
     }

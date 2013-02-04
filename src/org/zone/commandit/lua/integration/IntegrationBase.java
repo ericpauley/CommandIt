@@ -2,9 +2,13 @@ package org.zone.commandit.lua.integration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.event.block.Action;
 import org.zone.commandit.handler.CommandBlockInteractEvent;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
+
+import com.wimbli.WorldBorder.BorderData;
+import com.wimbli.WorldBorder.WorldBorder;
 
 public class IntegrationBase {
     
@@ -18,7 +22,7 @@ public class IntegrationBase {
      * Create a new base class for Lua interpretation.
      * @param e Event triggered by interaction with a command block
      */
-    public IntegrationBase(CommandBlockInteractEvent e) {
+    public IntegrationBase(final CommandBlockInteractEvent e) {
         event = e;
         player = new IntegrationPlayer(e);
         server = new IntegrationServer(e);
@@ -30,11 +34,22 @@ public class IntegrationBase {
     
     /**
      * Send command as console
+     * 
      * @param command
      */
     @LuaMethod
     public void console(String command) {
         server.run(command);
+    }
+    
+    /**
+     * Delay script execution
+     * 
+     * @param delay
+     */
+    @LuaMethod
+    public void delay(int delay) {
+        // TODO Implement delay
     }
     
     /**
@@ -97,7 +112,42 @@ public class IntegrationBase {
     }
     
     /**
+     * @return True if block was left-clicked
+     */
+    @LuaMethod
+    public boolean isLeftClick() {
+        return event.getAction() == Action.LEFT_CLICK_BLOCK;
+    }
+    
+    /**
+     * @return True if block was activated by physical interaction
+     */
+    @LuaMethod
+    public boolean isPhysical() {
+        return event.getAction() == Action.PHYSICAL;
+    }
+    
+    /**
+     * @return True if block was left-clicked
+     */
+    @LuaMethod
+    public boolean isRedstone() {
+        // TODO Implement isRedstone
+        // return event.getAction() == CommandBlockAction.REDSTONE;
+        return false;
+    }
+    
+    /**
+     * @return True if block was right-clicked
+     */
+    @LuaMethod
+    public boolean isRightClick() {
+        return event.getAction() == Action.RIGHT_CLICK_BLOCK;
+    }
+    
+    /**
      * Send command as Op
+     * 
      * @param command
      */
     @LuaMethod
@@ -106,7 +156,125 @@ public class IntegrationBase {
     }
     
     /**
+     * Get a random number between 0 and 1
+     */
+    @LuaMethod
+    public double random() {
+        return Math.random();
+    }
+    
+    /**
+     * Get a random number between min and max
+     * 
+     * @param min
+     * @param max
+     */
+    @LuaMethod
+    public double random(double min, double max) {
+        return (Math.random() * (max - min)) + min;
+    }
+    
+    /**
+     * Get a random integer between min and max
+     * @param min
+     * @param max
+     */
+    @LuaMethod
+    public int random(int min, int max) {
+        return (int) (Math.round(random((double) min, (double) max)));
+    }
+    
+    /**
+     * Get a random location on the map
+     */
+    @LuaMethod
+    public String randomLoc() {
+        int maxX = 2000;
+        int maxY = 255;
+        int maxZ = 2000;
+        
+        // If WorldBorder is installed, use it to get the maximum world size
+        if (Bukkit.getPluginManager().isPluginEnabled("WorldBorder")) {
+            WorldBorder wb = new WorldBorder();
+            BorderData b = wb.GetWorldBorder(world);
+            maxX = (int) b.getX();
+            maxZ = (int) b.getZ();
+        }
+        
+        return randomLoc(maxX, maxY, maxZ);
+    }
+    
+    /**
+     * Get a random location on the map within a sphere of the player
+     * 
+     * @param distance Farthest magnitude of distance from player
+     */
+    @LuaMethod
+    public String randomLoc(double distance) {
+        /*
+         * Warning: here be real maths - it takes a bit longer to compute Note:
+         * x and z take precedence over y in terms of randomness probability
+         */
+        
+        // Equation of Sphere is (x-a)^2 + (y-b)^2 + (z-c)^2 = r^2
+        // Take random x, a-r <= x <= a+r
+        double x = random(player.x - distance, player.x + distance);
+        // (y-b)^2 + (z-c)^2 = r^2 - (x-a)^2 = s^2
+        distance = Math.sqrt(Math.pow(distance, 2) - Math.pow(x - player.x, 2));
+        // Take random z, c-s <= z <= c+s
+        double z = random(player.z - distance, player.z + distance);
+        // (y-b)^2 = s^2 - (z-c)^2 = t^2
+        distance = Math.sqrt(Math.pow(distance, 2) - Math.pow(z - player.z, 2));
+        // Take random y, b-t <= y <= b+t
+        double y = random(player.y - distance, player.y + distance);
+        
+        return x + " " + y + " " + z;
+    }
+    
+    /**
+     * Get a random location on the map
+     * 
+     * @param maxX Maximum x coordinate (minimum = -x)
+     * @param maxY Maximum y coordinate
+     * @param maxZ Maximum z coordinate (minimum = -z)
+     */
+    @LuaMethod
+    public String randomLoc(int maxX, int maxY, int maxZ) {
+        return randomLoc(-maxX, maxX, 0, maxY, -maxZ, maxZ);
+    }
+    
+    /**
+     * Get a random location on the map
+     * 
+     * @param minX Minimum x coordinate
+     * @param maxX Maximum x coordinate
+     * @param minY Minimum y coordinate
+     * @param maxY Maximum y coordinate
+     * @param maxZ Minimum z coordinate
+     * @param maxZ Maximum z coordinate
+     */
+    @LuaMethod
+    public String randomLoc(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+        int x = random(minX, maxX);
+        int y = random(minY, maxY);
+        int z = random(minZ, maxZ);
+        
+        return x + " " + y + " " + z;
+    }
+    
+    /**
+     * Get a random player on the server
+     */
+    @LuaMethod
+    public IntegrationPlayer randomPlayer() {
+        IntegrationPlayer[] p = server.getPlayers();
+        int r = random(0, p.length - 1);
+        return p[r];
+    }
+    
+    /**
      * Send standard command without permission modification
+     * 
      * @param command
      */
     @LuaMethod
@@ -116,11 +284,22 @@ public class IntegrationBase {
     
     /**
      * Send command with all permissions
+     * 
      * @param command
      */
     @LuaMethod
     public void sudo(String command) {
         player.sudo(command);
+    }
+    
+    /**
+     * Send text to the player
+     * 
+     * @param message
+     */
+    @LuaMethod
+    public void text(String message) {
+        player.sendMessage(message);
     }
     
 }
