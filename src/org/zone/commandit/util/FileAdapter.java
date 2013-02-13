@@ -101,7 +101,7 @@ public class FileAdapter implements DataAdapter {
 
     @Override
     public void load() {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + filename));
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), filename));
         Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
         
         ConfigurationSection data = config.getConfigurationSection("blocks");
@@ -158,13 +158,11 @@ public class FileAdapter implements DataAdapter {
                     
                     loaded.put(loc, code);
                 } catch (Exception ex) {
-                    plugin.getLogger().warning("Unable to load command block " + attempts + ". " + ex.getMessage());
-                    ex.printStackTrace();
+                    plugin.getLogger().warning("Unable to load command block " + attempts + ".\n" + ex.getMessage());
                 }
             }
-            plugin.getLogger().info("Successfully loaded " + plugin.getCommandBlocks().size() + " command blocks");
-    
             cache = loaded;
+            plugin.getLogger().info("Successfully loaded " + cache.size() + " command blocks");
         }
     }
 
@@ -186,13 +184,14 @@ public class FileAdapter implements DataAdapter {
             block.set("active", code.isEnabled());
             block.createSection("cooldowns", code.getTimeouts());
             
-            try {
-                config.save(new File(plugin.getDataFolder(), filename));
-                plugin.getLogger().info(plugin.getCommandBlocks().size() + " command blocks saved");
-            } catch (IOException e) {
-                plugin.getLogger().severe("Failed to save CommandIt");
-                e.printStackTrace();
-            }
+        }
+        
+        try {
+            config.save(new File(plugin.getDataFolder(), filename));
+            plugin.getLogger().info(cache.size() + " command blocks saved");
+        } catch (IOException ex) {
+            plugin.getLogger().severe("Failed to save CommandIt");
+            ex.printStackTrace();
         }
     }
 }
