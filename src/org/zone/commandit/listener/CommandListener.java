@@ -9,9 +9,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.config.CommandBlocks;
+import org.zone.commandit.util.FileAdapter;
+import org.zone.commandit.util.FileConverter;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
+import org.zone.commandit.util.SqlAdapter;
 
 public class CommandListener implements CommandExecutor {
     
@@ -25,7 +29,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.regular")) {
+        if (plugin.hasPermission(player, "commandit.create.regular")) {
             clipboard(sender, player, lineNumber, 1, args);
             if (plugin.getPlayerStates().get(player) != PlayerState.EDIT) {
                 plugin.getPlayerStates().put(player, PlayerState.ENABLE);
@@ -95,7 +99,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.remove")) {
+        if (plugin.hasPermission(player, "commandit.remove")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -122,10 +126,10 @@ public class CommandListener implements CommandExecutor {
                 plugin.getPlayerCode().put(player, text);
             }
             String line = StringUtils.join(args, " ", textStart, args.length);
-            if (line.startsWith("/*") && !plugin.hasPermission(player, "CommandIt.create.super", false)) {
+            if (line.startsWith("/*") && !plugin.hasPermission(player, "commandit.create.super", false)) {
                 Message.sendMessage(player, "failure.no_super");
             }
-            if ((line.startsWith("/^") || line.startsWith("/#")) && !plugin.hasPermission(player, "CommandIt.create.op", false)) {
+            if ((line.startsWith("/^") || line.startsWith("/#")) && !plugin.hasPermission(player, "commandit.create.op", false)) {
                 Message.sendMessage(player, "failure.no_op");
             }
             text.setLine(lineNumber, line);
@@ -137,7 +141,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.regular")) {
+        if (plugin.hasPermission(player, "commandit.create.regular")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -151,7 +155,7 @@ public class CommandListener implements CommandExecutor {
     }
     
     protected boolean edit(final CommandSender sender, Player player, String[] args) {
-        if (plugin.hasPermission(sender, "CommandIt.edit", false)) {
+        if (plugin.hasPermission(sender, "commandit.edit", false)) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT_SELECT || ps == PlayerState.EDIT) {
                 finishEditing(player);
@@ -170,11 +174,42 @@ public class CommandListener implements CommandExecutor {
         Message.sendMessage(player, "success.done_editing");
     }
     
+    public boolean importData(final CommandSender sender, Player player, String[] args) {
+        if (plugin.hasPermission(sender, "commandit.import", false)) {
+            String source = "null";
+            try {
+                source = args[1];
+                if (source.equals("database")) {
+                    // Source is database
+                    CommandBlocks blocks = new CommandBlocks(new SqlAdapter(plugin));
+                    plugin.getCommandBlocks().putAll(blocks);
+                } else if (source.equals("old")) {
+                    // Source is old signs.yml file
+                    CommandBlocks blocks = new CommandBlocks(new FileConverter(plugin, "signs.yml"));
+                    plugin.getCommandBlocks().putAll(blocks);
+                } else if (source.endsWith(".yml")) {
+                    // Source is a YAML file
+                    CommandBlocks blocks = new CommandBlocks(new FileAdapter(plugin, source));
+                    plugin.getCommandBlocks().putAll(blocks);
+                } else {
+                    throw new IllegalArgumentException("Unknown source type.");
+                }
+            } catch (Exception ex) {
+                Message.sendMessage(player, "failure.import_fail", source);
+                return true;
+            }
+            Message.sendMessage(player, "success.import_success");
+        } else {
+            Message.sendMessage(player, "failure.no_perms");
+        }
+        return true;
+    }
+    
     protected boolean insert(final CommandSender sender, Player player, int lineNumber, String[] args) {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.regular")) {
+        if (plugin.hasPermission(player, "commandit.create.regular")) {
             clipboard(sender, player, lineNumber, 2, args);
             if (plugin.getPlayerStates().get(player) != PlayerState.EDIT) {
                 plugin.getPlayerStates().put(player, PlayerState.INSERT);
@@ -185,7 +220,7 @@ public class CommandListener implements CommandExecutor {
         }
         return true;
     }
-    
+
     @Override
     public boolean onCommand(final CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("CommandIt")) {
@@ -211,6 +246,8 @@ public class CommandListener implements CommandExecutor {
                 return copy(sender, player, args);
             } else if (command.equals("edit")) {
                 return edit(sender, player, args);
+            } else if (command.equals("import")) {
+                return importData(sender, player, args);
             } else if (command.equals("insert") && args.length > 1) {
                 pattern = Pattern.compile("(line|l)?(\\d+)");
                 matcher = pattern.matcher(args[1].toLowerCase());
@@ -244,7 +281,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.regular")) {
+        if (plugin.hasPermission(player, "commandit.create.regular")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -261,7 +298,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.redstone")) {
+        if (plugin.hasPermission(player, "commandit.create.redstone")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -275,7 +312,7 @@ public class CommandListener implements CommandExecutor {
     }
     
     protected boolean reload(final CommandSender sender, Player player, String[] args) {
-        if (plugin.hasPermission(sender, "CommandIt.reload", false)) {
+        if (plugin.hasPermission(sender, "commandit.reload", false)) {
             plugin.load();
             Message.sendMessage(sender, "success.reloaded");
         } else {
@@ -288,7 +325,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.remove")) {
+        if (plugin.hasPermission(player, "commandit.remove")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -302,8 +339,8 @@ public class CommandListener implements CommandExecutor {
     }
     
     protected boolean save(final CommandSender sender, Player player, String[] args) {
-        if (plugin.hasPermission(sender, "CommandIt.save", false)) {
-            plugin.getCodeLoader().save(plugin.getCodeBlocks(), "blocks.yml");
+        if (plugin.hasPermission(sender, "commandit.save", false)) {
+            plugin.getCommandBlocks().save();
             Message.sendMessage(sender, "success.saved");
         }
         return true;
@@ -313,7 +350,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.toggle")) {
+        if (plugin.hasPermission(player, "commandit.toggle")) {
             PlayerState ps = plugin.getPlayerStates().get(player);
             if (ps == PlayerState.EDIT || ps == PlayerState.EDIT_SELECT) {
                 finishEditing(player);
@@ -335,7 +372,7 @@ public class CommandListener implements CommandExecutor {
         if (player == null) {
             Message.sendMessage(sender, "failure.player_only");
         }
-        if (plugin.hasPermission(player, "CommandIt.create.regular")) {
+        if (plugin.hasPermission(player, "commandit.create.regular")) {
             LuaCode text = plugin.getPlayerCode().get(player);
             if (text == null) {
                 player.sendMessage("No text in clipboard");
