@@ -2,7 +2,7 @@ package org.zone.commandit.config;
 
 import org.bukkit.configuration.Configuration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.YamlLoader;
+import org.zone.commandit.io.YamlLoader;
 
 public class Messages extends ConfigStore {
     

@@ -1,4 +1,4 @@
-package org.zone.commandit.util;
+package org.zone.commandit.io;
 
 import java.io.File;
 import java.io.IOException;

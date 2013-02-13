@@ -1,4 +1,4 @@
-package org.zone.commandit.util;
+package org.zone.commandit.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.util.LuaCode;
 
 public class FileAdapter implements DataAdapter {
     
@@ -26,79 +27,91 @@ public class FileAdapter implements DataAdapter {
         this.plugin = plugin;
         this.filename = filename;
     }
-
+    
     @Override
     public void clear() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         cache.clear();
     }
     
     @Override
     public boolean containsKey(Object key) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.containsKey(key);
     }
     
     @Override
     public boolean containsValue(Object value) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.containsValue(value);
     }
     
     @Override
     public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.entrySet();
     }
     
     @Override
     public LuaCode get(Object key) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.get(key);
     }
     
     @Override
     public boolean isEmpty() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.isEmpty();
     }
     
     @Override
     public Set<Location> keySet() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.keySet();
     }
     
     @Override
     public LuaCode put(Location key, LuaCode value) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.put(key, value);
     }
     
     @Override
     public void putAll(Map<? extends Location, ? extends LuaCode> m) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         cache.putAll(m);
     }
     
     @Override
     public LuaCode remove(Object key) {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.remove(key);
     }
     
     @Override
     public int size() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.size();
     }
     
     @Override
     public Collection<LuaCode> values() {
-        if (cache == null) load();
+        if (cache == null)
+            load();
         return cache.values();
     }
-
+    
     @Override
     public void load() {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), filename));
@@ -165,7 +178,7 @@ public class FileAdapter implements DataAdapter {
             plugin.getLogger().info("Successfully loaded " + cache.size() + " command blocks");
         }
     }
-
+    
     @Override
     public void save() {
         FileConfiguration config = new YamlConfiguration();

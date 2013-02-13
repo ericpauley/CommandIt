@@ -10,12 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.zone.commandit.CommandIt;
 import org.zone.commandit.config.CommandBlocks;
-import org.zone.commandit.util.FileAdapter;
-import org.zone.commandit.util.FileConverter;
+import org.zone.commandit.io.FileAdapter;
+import org.zone.commandit.io.FileConverter;
+import org.zone.commandit.io.SqlAdapter;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
-import org.zone.commandit.util.SqlAdapter;
 
 public class CommandListener implements CommandExecutor {
     
@@ -220,7 +220,7 @@ public class CommandListener implements CommandExecutor {
         }
         return true;
     }
-
+    
     @Override
     public boolean onCommand(final CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("CommandIt")) {

@@ -1,4 +1,4 @@
-package org.zone.commandit.util;
+package org.zone.commandit.io;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.util.LuaCode;
 
 public class FileConverter extends FileAdapter {
     
@@ -87,7 +88,7 @@ public class FileConverter extends FileAdapter {
                     plugin.getLogger().warning("Unable to load CommandSign " + attempts + ".\n" + ex.getMessage());
                 }
             }
-    
+            
             /*
              * Convert old style to Lua
              */

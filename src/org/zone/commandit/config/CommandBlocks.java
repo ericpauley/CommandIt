@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
-import org.zone.commandit.util.DataAdapter;
+import org.zone.commandit.io.DataAdapter;
 import org.zone.commandit.util.LuaCode;
 
 public class CommandBlocks implements Map<Location, LuaCode> {
