@@ -1,80 +1,93 @@
 package org.zone.commandit.config;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
+import org.zone.commandit.util.DataAdapter;
 import org.zone.commandit.util.LuaCode;
 
-/**
- * This class is pretty useless for the minute
- * but it might come in handy later if sorcery
- * is required.
- */
-public class YamlBlocks implements Map<Location, LuaCode> {
+public class CommandBlocks implements Map<Location, LuaCode> {
     
-    private Map<Location, LuaCode> data = new HashMap<Location, LuaCode>();
+    private DataAdapter adapter;
+    
+    public CommandBlocks(DataAdapter adapter) {
+        this.adapter = adapter;
+    }
     
     @Override
     public void clear() {
-        data.clear();
+        adapter.clear();
     }
     
     @Override
     public boolean containsKey(Object key) {
-        return data.containsKey(key);
+        return adapter.containsKey(key);
     }
     
     @Override
     public boolean containsValue(Object value) {
-        return data.containsValue(value);
+        return adapter.containsValue(value);
     }
     
     @Override
     public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
-        return data.entrySet();
+        return adapter.entrySet();
     }
     
     @Override
     public LuaCode get(Object key) {
-        return data.get(key);
+        return adapter.get(key);
+    }
+    
+    /**
+     * Load command blocks from disk
+     */
+    public void load() {
+        adapter.load();
     }
     
     @Override
     public boolean isEmpty() {
-        return data.isEmpty();
+        return adapter.isEmpty();
     }
     
     @Override
     public Set<Location> keySet() {
-        return data.keySet();
+        return adapter.keySet();
     }
     
     @Override
     public LuaCode put(Location key, LuaCode value) {
-        return data.put(key, value);
+        return adapter.put(key, value);
     }
     
     @Override
     public void putAll(Map<? extends Location, ? extends LuaCode> m) {
-        data.putAll(m);
+        adapter.putAll(m);
     }
     
     @Override
     public LuaCode remove(Object key) {
-        return data.remove(key);
+        return adapter.remove(key);
+    }
+    
+    /**
+     * Save command blocks to disk
+     */
+    public void save() {
+        adapter.save();
     }
     
     @Override
     public int size() {
-        return data.size();
+        return adapter.size();
     }
     
     @Override
     public Collection<LuaCode> values() {
-        return data.values();
+        return adapter.values();
     }
     
 }

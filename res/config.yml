@@ -19,8 +19,8 @@ database:
   username: {USERNAME}
   password: {PASSWORD}
   
-  # URL Example (default): jdbc:mysql://127.0.0.1:3306/minecraft
-  url: jdbc:mysql://{IP}:{PORT}/{DATABASENAME}
+  # URL Example (default): mysql://127.0.0.1:3306/minecraft
+  url: mysql://{IP}:{PORT}/{DATABASENAME}
 
 # For updating the plugin automatically
 updater:

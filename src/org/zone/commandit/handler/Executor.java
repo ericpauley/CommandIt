@@ -30,7 +30,7 @@ public class Executor {
         this.player = player;
         this.action = action;
         this.location = location;
-        this.code = plugin.getCodeBlocks().get(location);
+        this.code = plugin.getCommandBlocks().get(location);
     }
     
     public Action getAction() {

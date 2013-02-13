@@ -11,6 +11,7 @@ success:
   enabled: "Command block enabled."
   disabled: "Command block disabled."
   removed: "Command block removed."
+  import_success: "Import successful."
     
 information:
   text_in_clipboard: "You still have code in your clipboard."
@@ -39,6 +40,7 @@ failure:
   must_select: "You must select a sign to edit or leave edit mode with /commandit clear."
   no_batch: "The mode you are in doesn't support batch processing."
   not_in_mode: "You must type a command before toggling batch mode."
+  import_fail: "Could not import from {SOURCE}."
     
 restriction:
   not_permitted: "This {TYPE} isn't allowed to socialise with people like you."

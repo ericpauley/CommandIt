@@ -22,12 +22,12 @@ public class ClickHandler {
     }
     
     public void copySign() {
-        LuaCode code = plugin.getCodeBlocks().get(location);
+        LuaCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        LuaCode clone = plugin.getCodeBlocks().get(location).clone(player.getName());
+        LuaCode clone = plugin.getCommandBlocks().get(location).clone(player.getName());
         plugin.getPlayerCode().put(player, clone);
         readSign(true);
         Message.sendMessage(player, "success.copied");
@@ -35,7 +35,7 @@ public class ClickHandler {
     }
     
     public void createSign(boolean batch) {
-        if (plugin.getCodeBlocks().containsKey(location)) {
+        if (plugin.getCommandBlocks().containsKey(location)) {
             Message.sendMessage(player, "failure.already_enabled");
             return;
         }
@@ -43,7 +43,7 @@ public class ClickHandler {
         
         try {
             code.trim();
-            plugin.getCodeBlocks().put(location, code.clone(player.getName()));
+            plugin.getCommandBlocks().put(location, code.clone(player.getName()));
             Message.sendMessage(player, "success.enabled");
         } catch (Exception e) {
             Message.sendMessage(player, "failure.wrong_syntax");
@@ -56,7 +56,7 @@ public class ClickHandler {
     }
     
     public void editSign() {
-        LuaCode code = plugin.getCodeBlocks().get(location);
+        LuaCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
@@ -67,7 +67,7 @@ public class ClickHandler {
     }
     
     public void insert(boolean batch) {
-        LuaCode currentText = plugin.getCodeBlocks().get(location);
+        LuaCode currentText = plugin.getCommandBlocks().get(location);
         if (currentText == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
@@ -146,7 +146,7 @@ public class ClickHandler {
     }
     
     public void readSign(boolean batch) {
-        LuaCode code = plugin.getCodeBlocks().get(location);
+        LuaCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
@@ -177,11 +177,11 @@ public class ClickHandler {
      */
     
     public void removeSign(boolean batch) {
-        if (!plugin.getCodeBlocks().containsKey(location)) {
+        if (!plugin.getCommandBlocks().containsKey(location)) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        plugin.getCodeBlocks().remove(location);
+        plugin.getCommandBlocks().remove(location);
         Message.sendMessage(player, "success.removed");
         if (!batch) {
             if (plugin.getPlayerCode().containsKey(player)) {
@@ -194,20 +194,20 @@ public class ClickHandler {
     }
     
     public void toggleSign(boolean batch) {
-        if (!plugin.getCodeBlocks().containsKey(location)) {
+        if (!plugin.getCommandBlocks().containsKey(location)) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        LuaCode code = plugin.getCodeBlocks().get(location);
-        plugin.getCodeBlocks().remove(location);
+        LuaCode code = plugin.getCommandBlocks().get(location);
+        plugin.getCommandBlocks().remove(location);
         boolean enabled = code.isEnabled();
         if (enabled) {
             code.setEnabled(false);
-            plugin.getCodeBlocks().put(location, code);
+            plugin.getCommandBlocks().put(location, code);
             Message.sendMessage(player, "success.disabled");
         } else {
             code.setEnabled(true);
-            plugin.getCodeBlocks().put(location, code);
+            plugin.getCommandBlocks().put(location, code);
             Message.sendMessage(player, "success.enabled");
         }
         if (!batch)

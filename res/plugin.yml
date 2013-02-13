@@ -24,6 +24,14 @@ commands:
                Note: You need permission to create a sign in order to read.
         /commandit edit
                Edit a command block in live mode.
+        /commandit import
+               Import command block files.
+               /commandit import database
+               		Import from database defined in config.
+               /commandit import old
+              		Import from CommandSigns signs.yml file.
+               /commandit import filename.yml
+               		Import from specified file.
         /commandit insert <linenumber> <text>
                Insert a line into an existing command block.
                Changes are stored in clipboard: click a sign to apply.
@@ -53,6 +61,7 @@ permissions:
             commandit.remove: true
             commandit.use.*: true
             commandit.group.*: true
+            commandit.import: true
             commandit.update: true
             commandit.save: true
             commandit.reload: true
@@ -98,6 +107,9 @@ permissions:
         default: false
     commandit.create.redstone:
         description: Allows you to create redstone-activated signs
+        default: false
+    commandit.import:
+        description: Allows you to import command blocks from disk
         default: false
     commandit.remove:
         description: Allows you to remove a command block

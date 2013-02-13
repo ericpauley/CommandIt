@@ -34,7 +34,7 @@ public class EventListener implements Listener {
             return;
         }
         Location location = event.getBlock().getLocation();
-        if (plugin.getCodeBlocks().containsKey(location)) {
+        if (plugin.getCommandBlocks().containsKey(location)) {
             Message.sendMessage(event.getPlayer(), "failure.remove_first");
             event.setCancelled(true);
         }

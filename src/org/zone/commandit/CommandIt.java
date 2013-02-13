@@ -7,25 +7,25 @@ import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.zone.commandit.config.CommandBlocks;
 import org.zone.commandit.config.Config;
 import org.zone.commandit.config.Messages;
-import org.zone.commandit.config.SqlBlocks;
-import org.zone.commandit.config.YamlBlocks;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
-import org.zone.commandit.util.FileLoader;
+import org.zone.commandit.util.DataAdapter;
+import org.zone.commandit.util.FileAdapter;
 import org.zone.commandit.util.LuaCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
+import org.zone.commandit.util.SqlAdapter;
 import org.zone.commandit.util.Updater;
 
 import se.krka.kahlua.vm.KahluaUtil;
@@ -33,7 +33,7 @@ import se.krka.kahlua.vm.KahluaUtil;
 public class CommandIt extends JavaPlugin {
     
     // Listeners
-    private final EventListener listener = new EventListener(this);
+    private EventListener listener = new EventListener(this);
     public CommandListener commandExecutor = new CommandListener(this);
     
     // Third-party
@@ -43,13 +43,12 @@ public class CommandIt extends JavaPlugin {
     private Permission permission;
     
     // Plugin variables
-    private Map<Location, LuaCode> cache = new HashMap<Location, LuaCode>();
+    private CommandBlocks blocks;
     private Map<OfflinePlayer, PlayerState> playerStates = new HashMap<OfflinePlayer, PlayerState>();
     private Map<OfflinePlayer, LuaCode> playerCode = new HashMap<OfflinePlayer, LuaCode>();
     
-    private final FileLoader loader = new FileLoader(this);
-    private final Config config = new Config(this);
-    private final Messages messages = new Messages(this);
+    private Config config = new Config(this);
+    private Messages messages = new Messages(this);
     private Updater updater;
     
     // Class variables
@@ -103,12 +102,14 @@ public class CommandIt extends JavaPlugin {
         setupPermissions();
         setupEconomy();
         
+        DataAdapter adapter;
         if (config.getBoolean("sql.enabled"))
-            cache = new SqlBlocks();
+            adapter = new SqlAdapter(this);
         else
-            cache = new YamlBlocks();
+            adapter = new FileAdapter(this, "blocks.yml");
         
-        cache.putAll(loader.load("blocks.yml"));
+        blocks = new CommandBlocks(adapter);
+        blocks.load();
         
         updater = new Updater(this, this.getFile());
         if (config.getBoolean("updater.auto-check") == true)
@@ -124,7 +125,8 @@ public class CommandIt extends JavaPlugin {
     public void onDisable() {
         if (updateTask != null)
             updateTask.cancel();
-        loader.save(cache, "blocks.yml");
+        
+        blocks.save();
     }
     
     @Override
@@ -182,13 +184,6 @@ public class CommandIt extends JavaPlugin {
     }
     
     /**
-     * @return Handler for loading code block data
-     */
-    public FileLoader getCodeLoader() {
-        return loader;
-    }
-    
-    /**
      * @return Handler for the updater system
      */
     public Updater getUpdater() {
@@ -198,8 +193,8 @@ public class CommandIt extends JavaPlugin {
     /**
      * @return All loaded code blocks on the server
      */
-    public Map<Location, LuaCode> getCodeBlocks() {
-        return cache;
+    public CommandBlocks getCommandBlocks() {
+        return blocks;
     }
     
     /**

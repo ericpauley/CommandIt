@@ -1,16 +1,32 @@
-package org.zone.commandit.config;
+package org.zone.commandit.util;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.bukkit.Location;
-import org.zone.commandit.util.LuaCode;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.zone.commandit.CommandIt;
 
-public class SqlBlocks implements Map<Location, LuaCode> {
+
+public class SqlAdapter implements DataAdapter {
     
+    protected CommandIt plugin;
+    protected FileConfiguration config;
+    protected Connection connection;
+    
+    public SqlAdapter(CommandIt plugin) {
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
+    }
+
     @Override
     public void clear() {
+        if (connection == null) load();
         /*
          * TRUNCATE TABLE blocks, code, cooldowns;
          */
@@ -18,6 +34,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public boolean containsKey(Object key) {
+        if (connection == null) load();
         /*
          * SELECT * FROM blocks
          * WHERE location = 'key'
@@ -28,6 +45,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public boolean containsValue(Object value) {
+        if (connection == null) load();
         /*
          * Too hideous
          */
@@ -36,6 +54,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
+        if (connection == null) load();
         /*
          * SELECT * FROM blocks
          * INNER JOIN code
@@ -48,6 +67,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public LuaCode get(Object key) {
+        if (connection == null) load();
         /*
          * SELECT * FROM blocks
          * WHERE blocks.location = 'key'
@@ -61,6 +81,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public boolean isEmpty() {
+        if (connection == null) load();
         /*
          * SELECT * FROM blocks
          */
@@ -69,6 +90,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public Set<Location> keySet() {
+        if (connection == null) load();
         /*
          * SELECT location FROM blocks
          * INNER JOIN code
@@ -81,6 +103,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public LuaCode put(Location key, LuaCode value) {
+        if (connection == null) load();
         /*
          * INSERT INTO blocks VALUES(
          *      key,
@@ -113,6 +136,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public LuaCode remove(Object key) {
+        if (connection == null) load();
         /*
          * DELETE FROM blocks
          * WHERE location = key;
@@ -122,6 +146,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public int size() {
+        if (connection == null) load();
         /*
          * SELECT COUNT(location) FROM blocks
          */
@@ -130,6 +155,7 @@ public class SqlBlocks implements Map<Location, LuaCode> {
     
     @Override
     public Collection<LuaCode> values() {
+        if (connection == null) load();
         /*
          * SELECT * FROM blocks
          * WHERE blocks.location = 'key'
@@ -139,6 +165,28 @@ public class SqlBlocks implements Map<Location, LuaCode> {
          *      ON blocks.location = cooldowns.location
          */
         return null;
+    }
+
+    @Override
+    public void load() {
+        if (connection == null) {
+            try {
+                Properties connectionProps = new Properties();
+                connectionProps.put("user", config.get("database.username"));
+                connectionProps.put("password", config.get("database.password"));
+        
+                connection = DriverManager.getConnection(
+                               "jdbc:" + config.get("database.url"),
+                               connectionProps);
+            } catch (SQLException ex) {
+                plugin.getLogger().severe("Unable to connect to database: " + ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void save() {
+        // No save required
     }
     
 }
