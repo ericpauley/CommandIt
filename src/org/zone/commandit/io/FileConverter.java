@@ -127,7 +127,6 @@ public class FileConverter extends FileAdapter {
                 s = s.replaceFirst("\\}", "");
             }
         }
-        System.out.println("OB: " + openblocks);
         // If blocks are not balanced, guess that the user left
         // off the '-'s at the end of the code; add } on the last line(s)
         for (int i = 0; i < openblocks; i++) {
