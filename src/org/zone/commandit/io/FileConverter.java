@@ -106,10 +106,34 @@ public class FileConverter extends FileAdapter {
      * @return
      */
     protected LuaCode convertToLua(LuaCode cst) {
+        int openblocks = 0;
         for (int line = 1; line <= cst.count(); line++) {
+            // Convert line
             String s = convertLine(cst.getLine(line));
             cst.setLine(line, s);
+            
+            // Count un-escaped { and } tags to make sure they match up
+            int index;
+            while ((index = s.indexOf("{")) >= 0) {
+                if (s.charAt(index - 1) != '\\') {
+                    openblocks++;
+                }
+                s = s.replaceFirst("\\{", "");
+            }
+            while ((index = s.indexOf("}")) >= 0) {
+                if (s.charAt(index - 1) != '\\') {
+                    openblocks--;
+                }
+                s = s.replaceFirst("\\}", "");
+            }
         }
+        System.out.println("OB: " + openblocks);
+        // If blocks are not balanced, guess that the user left
+        // off the '-'s at the end of the code; add } on the last line(s)
+        for (int i = 0; i < openblocks; i++) {
+            cst.addLine("}");
+        }
+        
         return cst;
     }
     
@@ -160,11 +184,13 @@ public class FileConverter extends FileAdapter {
             else if (check.startsWith("?")) {
                 s = s.replaceFirst("\\?", "");
                 check = s.substring(1);
+                visible = ", false)";
                 done = false;
             }
             else if (check.startsWith("!")) {
                 s = s.replaceFirst("\\!", "");
                 check = s.substring(1);
+                not = "!";
                 done = false;
             }
         }
