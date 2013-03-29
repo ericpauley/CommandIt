@@ -66,6 +66,7 @@ public class FileConverter extends FileAdapter {
                     // Get attributes
                     String owner = data.getString(key + ".owner", null);
                     
+                    // Add code
                     LuaCode code = new LuaCode(owner);
                     for (Object o : data.getList(key + ".text", new ArrayList<String>())) {
                         code.addLine(o.toString());
@@ -73,7 +74,7 @@ public class FileConverter extends FileAdapter {
                     
                     code.setEnabled(data.getBoolean(key + ".active", true));
                     
-                    // Cooldowns as Player => Expiry (UNIX timestamp)
+                    // Cooldowns as Player --> Expiry (UNIX timestamp)
                     Map<String, Long> timeouts = code.getTimeouts();
                     ConfigurationSection cooldowns = data.getConfigurationSection(key + ".cooldowns");
                     if (cooldowns == null) {
@@ -83,17 +84,13 @@ public class FileConverter extends FileAdapter {
                         timeouts.put(player, cooldowns.getLong(player));
                     }
                     
+                    // Convert
+                    code = convertToLua(code);
+                    
                     loaded.put(loc, code);
                 } catch (Exception ex) {
                     plugin.getLogger().warning("Unable to load CommandSign " + attempts + ".\n" + ex.getMessage());
                 }
-            }
-            
-            /*
-             * Convert old style to Lua
-             */
-            for (Map.Entry<Location, LuaCode> entry : loaded.entrySet()) {
-                entry.setValue(convertToLua(entry.getValue()));
             }
             
             cache = loaded;
@@ -109,133 +106,150 @@ public class FileConverter extends FileAdapter {
      * @return
      */
     protected LuaCode convertToLua(LuaCode cst) {
-        for (String s : cst) {
-            // Misc
-            s = s.replace("{", "\\{");
-            s = s.replace("}", "\\}");
-            if (s.startsWith("!")) {
-                s = s.replace("!", "} else {");
-            }
-            
-            // Directives
-            if (s.startsWith("\\")) {
-                s = s.substring(1);
-                s = "text(\"" + s + "\")";
-                continue;
-            } else if (s.startsWith(".")) {
-                s = s.substring(1);
-                s = "player.say(\"" + s + "\")";
-                continue;
-            } else if (s.startsWith("%")) {
-                s = s.substring(1);
-                s = "delay(" + s + ")";
-                continue;
-            } else if (s.startsWith("`")) {
-                s = s.substring(1);
-                s = "delay(random(0, " + s + "))";
-                continue;
-            }
-            
-            /*
-             * These strings are added to the final replacement strings rather
-             * than just using booleans.
-             */
-            String visible = ")";
-            String not = "";
-            
-            while (s.contains("-")) {
-                s = s.replaceFirst("-", "}");
-            }
-            while (s.contains("?")) {
-                s = s.replaceFirst("\\?", "");
-                visible = ", false)";
-            }
-            while (s.contains("!")) {
-                s = s.replaceFirst("\\!", "");
-                not = "!";
-            }
-            
-            // Restrictions
-            String format = "if (" + not + "#) {";
-            if (s.startsWith("@")) {
-                s = s.substring(1);
-                // Split multiple entries using commas
-                String[] groups = s.split(",");
-                String replacement = "";
-                for (int i = 0; i < groups.length; i++) {
-                    replacement += "player.inGroup(\"" + groups[i] + "\")";
-                    // If not last, add the ' or ' connective
-                    if (i < groups.length)
-                        replacement += " or ";
-                }
-                s = format.replaceFirst("#", replacement);
-                // We're done here, continue
-                continue;
-            } else if (s.startsWith("~")) {
-                s = s.substring(1);
-                s = format.replaceFirst("#", "player.timeout > " + s);
-                continue;
-            } else if (s.startsWith("$")) {
-                s = s.substring(1);
-                s = format.replaceFirst("#", "player.balance > " + s);
-                continue;
-            } else if (s.startsWith(">>")) {
-                s = s.substring(1);
-                s = format.replaceFirst("#", "isRightClick()");
-                continue;
-            } else if (s.startsWith("<<")) {
-                s = s.substring(1);
-                s = format.replaceFirst("#", "isLeftClick()");
-                continue;
-            } else if (s.startsWith("&")) {
-                s = s.substring(1);
-                String[] perms = s.split(",");
-                String replacement = "";
-                for (int i = 0; i < perms.length; i++) {
-                    replacement += "player.hasPerm(\"" + perms[i] + "\")";
-                    if (i < perms.length)
-                        replacement += " or ";
-                }
-                s = format.replaceFirst("#", replacement);
-                continue;
-            }
-            
-            // Commands
-            if (s.startsWith("/")) {
-                String command = "run";
-                s = s.substring(1);
-                
-                if (s.startsWith("#")) {
-                    command = "console";
-                    s = s.substring(1);
-                } else if (s.startsWith("^")) {
-                    command = "op";
-                    s = s.substring(1);
-                } else if (s.startsWith("*")) {
-                    command = "super";
-                    s = s.substring(1);
-                }
-                
-                s = command + "(\"" + s + "\"" + visible;
-            }
-            
-            // Variables
-            s = s.replace("<x>", "{player.x}");
-            s = s.replace("<y>", "{player.y}");
-            s = s.replace("<z>", "{player.z}");
-            s = s.replace("<blockx>", "{x}");
-            s = s.replace("<blocky>", "{y}");
-            s = s.replace("<blockz>", "{z}");
-            s = s.replace("<world>", "{world}");
-            s = s.replace("<name>", "{player.name}");
-            s = s.replace("<player>", "{player.name}");
-            s = s.replace("<randomname>", "{randomPlayer()}");
-            s = s.replace("<near>", "{getNearest().name}");
-            s = s.replace("<display>", "{player.display}");
-            s = s.replace("<money>", "{player.balance}");
-            s = s.replace("<formatted>", "{player.money}");
-            s = s.replace("<ip>", "{player.ip}");
+        for (int line = 1; line <= cst.count(); line++) {
+            String s = convertLine(cst.getLine(line));
+            cst.setLine(line, s);
         }
         return cst;
+    }
+    
+    protected String convertLine(String s) {
+        // Misc
+        s = s.replace("{", "\\{");
+        s = s.replace("}", "\\}");
+        if (s.equals("!")) {
+            s = s.replace("!", "} else {");
+            return s;
+        }
+
+        // Directives
+        if (s.startsWith("\\")) {
+            s = s.substring(1);
+            s = "text(\"" + s + "\")";
+            return s;
+        } else if (s.startsWith(".")) {
+            s = s.substring(1);
+            s = "player.say(\"" + s + "\")";
+            return s;
+        } else if (s.startsWith("%")) {
+            s = s.substring(1);
+            s = "delay(" + s + ")";
+            return s;
+        } else if (s.startsWith("`")) {
+            s = s.substring(1);
+            s = "delay(random(0, " + s + "))";
+            return s;
+        }
+
+        /*
+         * These strings are added to the final replacement strings rather
+         * than just using booleans.
+         */
+        String visible = ")";
+        String not = "";
+        
+        boolean done = false;
+        String check = s;
+        while (!done) {
+            done = true;
+            if (check.startsWith("-")) {
+                s = s.replaceFirst("-", "}");
+                check = s.substring(1);
+                done = false;
+            }
+            else if (check.startsWith("?")) {
+                s = s.replaceFirst("\\?", "");
+                check = s.substring(1);
+                done = false;
+            }
+            else if (check.startsWith("!")) {
+                s = s.replaceFirst("\\!", "");
+                check = s.substring(1);
+                done = false;
+            }
+        }
+
+        // Restrictions
+        String format = "if (" + not + "#) {";
+        if (s.startsWith("@")) {
+            s = s.substring(1);
+            // Split multiple entries using commas
+            String[] groups = s.split(",");
+            String replacement = "";
+            for (int i = 0; i < groups.length; i++) {
+                replacement += "player.inGroup(\"" + groups[i] + "\")";
+                // If not last, add the ' or ' connective
+                if (i < groups.length - 1)
+                    replacement += " or ";
+            }
+            s = format.replaceFirst("#", replacement);
+            // We're done here
+            return s;
+        } else if (s.startsWith("~")) {
+            s = s.substring(1);
+            s = format.replaceFirst("#", "player.timeout > " + s);
+            return s;
+        } else if (s.startsWith("$")) {
+            s = s.substring(1);
+            s = format.replaceFirst("#", "player.balance > " + s);
+            return s;
+        } else if (s.startsWith(">>")) {
+            s = s.substring(1);
+            s = format.replaceFirst("#", "isRightClick()");
+            return s;
+        } else if (s.startsWith("<<")) {
+            s = s.substring(1);
+            s = format.replaceFirst("#", "isLeftClick()");
+            return s;
+        } else if (s.startsWith("&")) {
+            s = s.substring(1);
+            String[] perms = s.split(",");
+            String replacement = "";
+            for (int i = 0; i < perms.length; i++) {
+                replacement += "player.hasPerm(\"" + perms[i] + "\")";
+                if (i < perms.length)
+                    replacement += " or ";
+            }
+            s = format.replaceFirst("#", replacement);
+            return s;
+        }
+
+        // Commands
+        if (s.startsWith("/")) {
+            String command = "run";
+            s = s.substring(1);
+            
+            if (s.startsWith("#")) {
+                command = "console";
+                s = s.substring(1);
+            } else if (s.startsWith("^")) {
+                command = "op";
+                s = s.substring(1);
+            } else if (s.startsWith("*")) {
+                command = "super";
+                s = s.substring(1);
+            }
+            
+            s = command + "(\"" + s + "\"" + visible;
+        }
+
+        // Variables
+        s = s.replace("<x>", "{player.x}");
+        s = s.replace("<y>", "{player.y}");
+        s = s.replace("<z>", "{player.z}");
+        s = s.replace("<blockx>", "{x}");
+        s = s.replace("<blocky>", "{y}");
+        s = s.replace("<blockz>", "{z}");
+        s = s.replace("<world>", "{world}");
+        s = s.replace("<name>", "{player.name}");
+        s = s.replace("<player>", "{player.name}");
+        s = s.replace("<randomname>", "{randomPlayer()}");
+        s = s.replace("<near>", "{getNearest().name}");
+        s = s.replace("<display>", "{player.display}");
+        s = s.replace("<money>", "{player.balance}");
+        s = s.replace("<formatted>", "{player.money}");
+        s = s.replace("<ip>", "{player.ip}");
+        
+        return s;
     }
 }
