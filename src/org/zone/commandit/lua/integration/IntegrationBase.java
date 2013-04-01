@@ -152,7 +152,18 @@ public class IntegrationBase {
      */
     @LuaMethod
     public void op(String command) {
-        player.op(command);
+        op(command, true);
+    }
+    
+    /**
+     * Send command as Op
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void op(String command, boolean visible) {
+        player.op(command, visible);
     }
     
     /**
@@ -279,7 +290,18 @@ public class IntegrationBase {
      */
     @LuaMethod
     public void run(String command) {
-        player.run(command);
+        run(command, true);
+    }
+    
+    /**
+     * Send standard command without permission modification
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void run(String command, boolean visible) {
+        player.run(command, visible);
     }
     
     /**
@@ -289,7 +311,18 @@ public class IntegrationBase {
      */
     @LuaMethod
     public void sudo(String command) {
-        player.sudo(command);
+        sudo(command, true);
+    }
+    
+    /**
+     * Send command with all permissions
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void sudo(String command, boolean visible) {
+        player.sudo(command, visible);
     }
     
     /**

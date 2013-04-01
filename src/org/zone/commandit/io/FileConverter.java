@@ -246,6 +246,7 @@ public class FileConverter extends FileAdapter {
             
             if (s.startsWith("#")) {
                 command = "console";
+                visible = ")";
                 s = s.substring(1);
             } else if (s.startsWith("^")) {
                 command = "op";
