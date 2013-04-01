@@ -27,6 +27,7 @@ progress:
     
 failure:
   prefix: "&c"
+  command_error: "An exception occurred whilst executing '{COMMAND}': {MESSAGE}"
   no_perms: "You do not have permission to do this."
   wrong_syntax: "Wrong CommandIt command syntax."
   no_super: "You may not make signs with '/*'."

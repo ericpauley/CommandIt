@@ -8,9 +8,11 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.zone.commandit.handler.CommandBlockInteractEvent;
+import org.zone.commandit.util.Message;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
@@ -127,13 +129,24 @@ public class IntegrationPlayer {
      */
     @LuaMethod
     public void op(String command) {
+        op(command, true);
+    }
+    
+    /**
+     * Send command as Op
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void op(String command, boolean visible) {
         if (perms.has(player, "commandit.use.op")) {
             if (!player.isOp()) {
                 player.setOp(true);
-                run(command);
+                run(command, visible);
                 player.setOp(false);
             } else {
-                run(command);
+                run(command, visible);
             }
         }
     }
@@ -145,8 +158,25 @@ public class IntegrationPlayer {
      */
     @LuaMethod
     public void run(String command) {
-        if (perms.has(player, "commandit.use.regular")) {
-            Bukkit.dispatchCommand(player, command);
+        run(command, true);
+    }
+    
+    /**
+     * Send standard command without permission modification
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void run(String command, boolean visible) {
+        try {
+            if (perms.has(player, "commandit.use.regular")) {
+                CommandSender sender = player;
+                if (!visible) sender = new SilentCommandSender().emulate(player);
+                Bukkit.dispatchCommand(sender, command);
+            }
+        } catch (Exception ex) {
+            Message.severe("command_error", command, ex.getMessage());
         }
     }
     
@@ -178,13 +208,24 @@ public class IntegrationPlayer {
      */
     @LuaMethod
     public void sudo(String command) {
+        sudo(command, true);
+    }
+    
+    /**
+     * Send command with all permissions
+     * 
+     * @param command
+     * @param visible Set to false if output from the command shouldn't be sent back to the user
+     */
+    @LuaMethod
+    public void sudo(String command, boolean visible) {
         if (perms.has(player, "commandit.use.sudo")) {
             if (!perms.has(player, "*")) {
                 perms.playerAddTransient(player, "*");
-                run(command);
+                run(command, visible);
                 perms.playerRemoveTransient(player, "*");
             } else {
-                run(command);
+                run(command, visible);
             }
         }
     }
