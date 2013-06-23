@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.zone.commandit.CommandIt;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.zone.commandit.config.Messages;
 
 public class Message {
     
     private static Messages messagesInstance;
-    private static CommandIt plugin;
+    private static JavaPlugin plugin;
     
-    public static void init(CommandIt plugin) {
+    public static void init(JavaPlugin plugin) {
         Message.plugin = plugin;
     }
     

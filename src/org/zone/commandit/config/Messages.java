@@ -1,12 +1,12 @@
 package org.zone.commandit.config;
 
 import org.bukkit.configuration.Configuration;
-import org.zone.commandit.CommandIt;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.zone.commandit.io.YamlLoader;
 
 public class Messages extends ConfigStore {
     
-    public Messages(CommandIt plugin) {
+    public Messages(JavaPlugin plugin) {
         super(plugin);
     }
     

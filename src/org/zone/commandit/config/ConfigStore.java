@@ -5,14 +5,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.zone.commandit.CommandIt;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class ConfigStore implements Map<String, String> {
     
     protected Map<String, String> config = new ConcurrentHashMap<String, String>();
-    protected CommandIt plugin;
+    protected JavaPlugin plugin;
     
-    public ConfigStore(CommandIt plugin) {
+    public ConfigStore(JavaPlugin plugin) {
         this.plugin = plugin;
     }
     

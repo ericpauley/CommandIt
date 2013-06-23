@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.zone.commandit.CommandIt;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.zone.commandit.util.Updater.Version;
 
 public class YamlLoader {
@@ -18,7 +18,7 @@ public class YamlLoader {
      * @param filename
      * @return
      */
-    public static Configuration loadResource(CommandIt plugin, String filename) {
+    public static Configuration loadResource(JavaPlugin plugin, String filename) {
         File f = new File(plugin.getDataFolder(), filename);
         
         // Load the included file
