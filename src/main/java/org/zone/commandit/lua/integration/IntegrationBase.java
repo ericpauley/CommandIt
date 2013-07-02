@@ -7,9 +7,6 @@ import org.zone.commandit.handler.CommandBlockInteractEvent;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
-import com.wimbli.WorldBorder.BorderData;
-import com.wimbli.WorldBorder.WorldBorder;
-
 public class IntegrationBase {
     
     protected CommandBlockInteractEvent event;
@@ -205,12 +202,14 @@ public class IntegrationBase {
         int maxZ = 2000;
         
         // If WorldBorder is installed, use it to get the maximum world size
+        /*
         if (Bukkit.getPluginManager().isPluginEnabled("WorldBorder")) {
             WorldBorder wb = new WorldBorder();
             BorderData b = wb.GetWorldBorder(world);
             maxX = (int) b.getX();
             maxZ = (int) b.getZ();
         }
+        */
         
         return randomLoc(maxX, maxY, maxZ);
     }
