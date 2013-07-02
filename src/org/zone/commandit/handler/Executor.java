@@ -1,12 +1,14 @@
 package org.zone.commandit.handler;
 
+import java.io.IOException;
 import java.util.Stack;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.python.util.PythonRunner;
+import org.zone.commandit.util.PythonCode;
 
 public class Executor {
     
@@ -21,7 +23,7 @@ public class Executor {
     
     private final Stack<Boolean> restrictions = new Stack<Boolean>();
     
-    private final LuaCode code;
+    private final PythonCode code;
     
     private double wait;
     
@@ -53,7 +55,7 @@ public class Executor {
         return restrictions;
     }
     
-    public LuaCode getCode() {
+    public PythonCode getCode() {
         return code;
     }
     
@@ -62,7 +64,11 @@ public class Executor {
     }
     
     public boolean run() {
-        return false;
+        try {
+			return PythonRunner.createRunner(code.toString(), "player", player).run();
+		} catch (IOException e) {
+			return false;
+		}
     }
     
     public void setWait(double wait) {

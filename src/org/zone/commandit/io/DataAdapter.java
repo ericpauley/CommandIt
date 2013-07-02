@@ -3,9 +3,9 @@ package org.zone.commandit.io;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 
-public interface DataAdapter extends Map<Location, LuaCode> {
+public interface DataAdapter extends Map<Location, PythonCode> {
     
     /**
      * Load command blocks from disk

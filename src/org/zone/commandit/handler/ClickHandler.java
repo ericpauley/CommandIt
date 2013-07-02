@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
 
@@ -22,12 +22,12 @@ public class ClickHandler {
     }
     
     public void copySign() {
-        LuaCode code = plugin.getCommandBlocks().get(location);
+        PythonCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        LuaCode clone = plugin.getCommandBlocks().get(location).clone(player.getName());
+        PythonCode clone = plugin.getCommandBlocks().get(location).clone(player.getName());
         plugin.getPlayerCode().put(player, clone);
         readSign(true);
         Message.sendMessage(player, "success.copied");
@@ -39,7 +39,7 @@ public class ClickHandler {
             Message.sendMessage(player, "failure.already_enabled");
             return;
         }
-        LuaCode code = plugin.getPlayerCode().get(player);
+        PythonCode code = plugin.getPlayerCode().get(player);
         
         try {
             code.trim();
@@ -56,7 +56,7 @@ public class ClickHandler {
     }
     
     public void editSign() {
-        LuaCode code = plugin.getCommandBlocks().get(location);
+        PythonCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
@@ -67,12 +67,12 @@ public class ClickHandler {
     }
     
     public void insert(boolean batch) {
-        LuaCode currentText = plugin.getCommandBlocks().get(location);
+        PythonCode currentText = plugin.getCommandBlocks().get(location);
         if (currentText == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        LuaCode newText = plugin.getPlayerCode().get(player);
+        PythonCode newText = plugin.getPlayerCode().get(player);
         
         // Insert lines from last to first - that way you don't overwrite stuff
         for (int i = newText.count(); i >= 1; i--) {
@@ -146,7 +146,7 @@ public class ClickHandler {
     }
     
     public void readSign(boolean batch) {
-        LuaCode code = plugin.getCommandBlocks().get(location);
+        PythonCode code = plugin.getCommandBlocks().get(location);
         if (code == null) {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
@@ -198,7 +198,7 @@ public class ClickHandler {
             Message.sendMessage(player, "failure.not_a_sign");
             return;
         }
-        LuaCode code = plugin.getCommandBlocks().get(location);
+        PythonCode code = plugin.getCommandBlocks().get(location);
         plugin.getCommandBlocks().remove(location);
         boolean enabled = code.isEnabled();
         if (enabled) {

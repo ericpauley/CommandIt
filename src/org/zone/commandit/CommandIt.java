@@ -22,7 +22,7 @@ import org.zone.commandit.io.SqlAdapter;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
@@ -45,7 +45,7 @@ public class CommandIt extends JavaPlugin {
     // Plugin variables
     private CommandBlocks blocks;
     private Map<OfflinePlayer, PlayerState> playerStates = new HashMap<OfflinePlayer, PlayerState>();
-    private Map<OfflinePlayer, LuaCode> playerCode = new HashMap<OfflinePlayer, LuaCode>();
+    private Map<OfflinePlayer, PythonCode> playerCode = new HashMap<OfflinePlayer, PythonCode>();
     
     private Config config = new Config(this);
     private Messages messages = new Messages(this);
@@ -207,7 +207,7 @@ public class CommandIt extends JavaPlugin {
     /**
      * @return The clipboards of all players on the server
      */
-    public Map<OfflinePlayer, LuaCode> getPlayerCode() {
+    public Map<OfflinePlayer, PythonCode> getPlayerCode() {
         return playerCode;
     }
     
