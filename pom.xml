@@ -73,25 +73,5 @@
 			<type>jar</type>
             <scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>se.krka.kahlua</groupId>
-			<artifactId>kahlua-cldc11</artifactId>
-			<version>5.1_2.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>se.krka.kahlua</groupId>
-			<artifactId>kahlua-core</artifactId>
-			<version>5.1_2.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>se.krka.kahlua</groupId>
-			<artifactId>kahlua-interpreter</artifactId>
-			<version>5.1_2.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>se.krka.kahlua</groupId>
-			<artifactId>kahlua-j2se</artifactId>
-			<version>5.1_2.1.0</version>
-		</dependency>
     </dependencies>
 </project>

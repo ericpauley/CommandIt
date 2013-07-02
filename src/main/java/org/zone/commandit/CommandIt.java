@@ -1,6 +1,5 @@
 package org.zone.commandit;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,13 +21,11 @@ import org.zone.commandit.io.SqlAdapter;
 import org.zone.commandit.listener.CommandListener;
 import org.zone.commandit.listener.EventListener;
 import org.zone.commandit.thirdparty.Metrics;
-import org.zone.commandit.util.PythonCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
+import org.zone.commandit.util.PythonCode;
 import org.zone.commandit.util.Updater;
-
-import se.krka.kahlua.vm.KahluaUtil;
 
 public class CommandIt extends JavaPlugin {
     
@@ -98,7 +95,6 @@ public class CommandIt extends JavaPlugin {
         config.load();
         messages.load();
         Message.init(this);
-        setupLuaLoader();
         setupPermissions();
         setupEconomy();
         
@@ -135,19 +131,6 @@ public class CommandIt extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         getCommand("commandit").setExecutor(commandExecutor);
         pm.registerEvents(listener, this);
-    }
-    
-    /**
-     * Sets up the stream provider for built-in lua libraries
-     */
-    private void setupLuaLoader() {
-        KahluaUtil.provider = new KahluaUtil.StreamProvider() {
-            
-            @Override
-            public InputStream getStream(String arg0) {
-                return getResource(arg0);
-            }
-        };
     }
     
     /**

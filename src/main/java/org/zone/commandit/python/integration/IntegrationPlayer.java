@@ -1,4 +1,4 @@
-package org.zone.commandit.lua.integration;
+package org.zone.commandit.python.integration;
 
 import java.util.HashMap;
 
@@ -13,8 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.zone.commandit.handler.CommandBlockInteractEvent;
 import org.zone.commandit.util.Message;
-
-import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationPlayer {
     
@@ -68,7 +66,7 @@ public class IntegrationPlayer {
      * @param item Item name
      * @param quanity Amount to give
      */
-    @LuaMethod
+    
     public void giveItem(String item, int quantity) {
         // TODO Implement giveItem
     }
@@ -79,7 +77,7 @@ public class IntegrationPlayer {
      * @param item Item name
      * @return Quantity in inventory
      */
-    @LuaMethod
+    
     public int hasItem(String item) {
         int count = 0;
         for (ItemStack invItem : player.getInventory()) {
@@ -95,7 +93,7 @@ public class IntegrationPlayer {
      * 
      * @param permission Permission node in dotted format
      */
-    @LuaMethod
+    
     public boolean hasPerm(String permission) {
         return perms.has(player, permission);
     }
@@ -105,7 +103,7 @@ public class IntegrationPlayer {
      * 
      * @param group Group name
      */
-    @LuaMethod
+    
     public boolean inGroup(String group) {
         return inGroup(group, false);
     }
@@ -116,7 +114,7 @@ public class IntegrationPlayer {
      * @param group Group name
      * @param inherited True if inherting a group counts as being in the group
      */
-    @LuaMethod
+    
     public boolean inGroup(String group, boolean inherited) {
         // TODO Implement inheritance once tested
         return perms.playerInGroup(player, group);
@@ -127,7 +125,7 @@ public class IntegrationPlayer {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void op(String command) {
         op(command, true);
     }
@@ -138,7 +136,7 @@ public class IntegrationPlayer {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void op(String command, boolean visible) {
         if (perms.has(player, "commandit.use.op")) {
             if (!player.isOp()) {
@@ -156,7 +154,7 @@ public class IntegrationPlayer {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void run(String command) {
         run(command, true);
     }
@@ -167,7 +165,7 @@ public class IntegrationPlayer {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void run(String command, boolean visible) {
         try {
             if (perms.has(player, "commandit.use.regular")) {
@@ -185,7 +183,7 @@ public class IntegrationPlayer {
      * 
      * @param message
      */
-    @LuaMethod
+    
     public void say(String message) {
         player.chat(message);
     }
@@ -196,7 +194,7 @@ public class IntegrationPlayer {
      * @param message
      *            The message to send
      */
-    @LuaMethod
+    
     public void sendMessage(String message) {
         player.sendMessage(message);
     }
@@ -206,7 +204,7 @@ public class IntegrationPlayer {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void sudo(String command) {
         sudo(command, true);
     }
@@ -217,7 +215,7 @@ public class IntegrationPlayer {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void sudo(String command, boolean visible) {
         if (perms.has(player, "commandit.use.sudo")) {
             if (!perms.has(player, "*")) {
@@ -236,7 +234,7 @@ public class IntegrationPlayer {
      * @param item Item name
      * @param quanity Amount to take
      */
-    @LuaMethod
+    
     public void takeItem(String item, int quantity) {
         // Get all items with the given name
         HashMap<Integer, ? extends ItemStack> items = player.getInventory().all(Material.getMaterial(item));
@@ -261,7 +259,7 @@ public class IntegrationPlayer {
      * 
      * @param amount
      */
-    @LuaMethod
+    
     public void takeMoney(int amount) {
         econ.withdrawPlayer(player.getName(), amount);
     }
@@ -276,7 +274,7 @@ public class IntegrationPlayer {
      * @param z
      *            The Z coordinate to teleport the player to
      */
-    @LuaMethod
+    
     public void teleport(double x, double y, double z) {
         player.teleport(new Location(player.getWorld(), x, y, z));
     }
@@ -293,7 +291,7 @@ public class IntegrationPlayer {
      * @param z
      *            The Z coordinate to teleport the player to
      */
-    @LuaMethod
+    
     public void teleport(String world, double x, double y, double z) {
         player.teleport(new Location(event.getPlugin().getServer().getWorld(world), x, y, z));
     }

@@ -1,8 +1,6 @@
-package org.zone.commandit.lua.integration;
+package org.zone.commandit.python.integration;
 
 import org.bukkit.World;
-
-import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationTime {
     
@@ -12,12 +10,12 @@ public class IntegrationTime {
         time = world.getTime();
     }
     
-    @LuaMethod
+    
     public long asTicks() {
         return time * 20;
     }
     
-    @LuaMethod
+    
     public String toString() {
         long hours = Math.round(Math.floor(time / 1000));
         long minutes = Math.round(time % 1000);

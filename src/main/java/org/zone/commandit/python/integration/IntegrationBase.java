@@ -1,11 +1,9 @@
-package org.zone.commandit.lua.integration;
+package org.zone.commandit.python.integration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.handler.CommandBlockInteractEvent;
-
-import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationBase {
     
@@ -34,7 +32,7 @@ public class IntegrationBase {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void console(String command) {
         server.run(command);
     }
@@ -44,7 +42,7 @@ public class IntegrationBase {
      * 
      * @param delay
      */
-    @LuaMethod
+    
     public void delay(int delay) {
         // TODO Implement delay
     }
@@ -60,7 +58,7 @@ public class IntegrationBase {
     /**
      * @return Nearest player to command block
      */
-    @LuaMethod
+    
     public IntegrationPlayer getNearest() {
         // Get all players
         IntegrationPlayer[] online = server.getPlayers();
@@ -87,7 +85,7 @@ public class IntegrationBase {
     /**
      * @return Player who interacted with the command block
      */
-    @LuaMethod
+    
     public IntegrationPlayer getPlayer() {
         return player;
     }
@@ -95,7 +93,7 @@ public class IntegrationBase {
     /**
      * @return Server instance on which the interaction occurred
      */
-    @LuaMethod
+    
     public IntegrationServer getServer() {
         return server;
     }
@@ -103,7 +101,7 @@ public class IntegrationBase {
     /**
      * @return Current time in this world
      */
-    @LuaMethod
+    
     public IntegrationTime getTime() {
         return new IntegrationTime(Bukkit.getWorld(world));
     }
@@ -111,7 +109,7 @@ public class IntegrationBase {
     /**
      * @return True if block was left-clicked
      */
-    @LuaMethod
+    
     public boolean isLeftClick() {
         return event.getAction() == Action.LEFT_CLICK_BLOCK;
     }
@@ -119,7 +117,7 @@ public class IntegrationBase {
     /**
      * @return True if block was activated by physical interaction
      */
-    @LuaMethod
+    
     public boolean isPhysical() {
         return event.getAction() == Action.PHYSICAL;
     }
@@ -127,7 +125,7 @@ public class IntegrationBase {
     /**
      * @return True if block was left-clicked
      */
-    @LuaMethod
+    
     public boolean isRedstone() {
         // TODO Implement isRedstone
         // return event.getAction() == CommandBlockAction.REDSTONE;
@@ -137,7 +135,7 @@ public class IntegrationBase {
     /**
      * @return True if block was right-clicked
      */
-    @LuaMethod
+    
     public boolean isRightClick() {
         return event.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
@@ -147,7 +145,7 @@ public class IntegrationBase {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void op(String command) {
         op(command, true);
     }
@@ -158,7 +156,7 @@ public class IntegrationBase {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void op(String command, boolean visible) {
         player.op(command, visible);
     }
@@ -166,7 +164,7 @@ public class IntegrationBase {
     /**
      * Get a random number between 0 and 1
      */
-    @LuaMethod
+    
     public double random() {
         return Math.random();
     }
@@ -177,7 +175,7 @@ public class IntegrationBase {
      * @param min
      * @param max
      */
-    @LuaMethod
+    
     public double random(double min, double max) {
         return (Math.random() * (max - min)) + min;
     }
@@ -187,7 +185,7 @@ public class IntegrationBase {
      * @param min
      * @param max
      */
-    @LuaMethod
+    
     public int random(int min, int max) {
         return (int) (Math.round(random((double) min, (double) max)));
     }
@@ -195,7 +193,7 @@ public class IntegrationBase {
     /**
      * Get a random location on the map
      */
-    @LuaMethod
+    
     public String randomLoc() {
         int maxX = 2000;
         int maxY = 255;
@@ -219,7 +217,7 @@ public class IntegrationBase {
      * 
      * @param distance Farthest magnitude of distance from player
      */
-    @LuaMethod
+    
     public String randomLoc(double distance) {
         /*
          * Warning: here be real maths - it takes a bit longer to compute Note:
@@ -248,7 +246,7 @@ public class IntegrationBase {
      * @param maxY Maximum y coordinate
      * @param maxZ Maximum z coordinate (minimum = -z)
      */
-    @LuaMethod
+    
     public String randomLoc(int maxX, int maxY, int maxZ) {
         return randomLoc(-maxX, maxX, 0, maxY, -maxZ, maxZ);
     }
@@ -263,7 +261,7 @@ public class IntegrationBase {
      * @param maxZ Minimum z coordinate
      * @param maxZ Maximum z coordinate
      */
-    @LuaMethod
+    
     public String randomLoc(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
         int x = random(minX, maxX);
         int y = random(minY, maxY);
@@ -275,7 +273,7 @@ public class IntegrationBase {
     /**
      * Get a random player on the server
      */
-    @LuaMethod
+    
     public IntegrationPlayer randomPlayer() {
         IntegrationPlayer[] p = server.getPlayers();
         int r = random(0, p.length - 1);
@@ -287,7 +285,7 @@ public class IntegrationBase {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void run(String command) {
         run(command, true);
     }
@@ -298,7 +296,7 @@ public class IntegrationBase {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void run(String command, boolean visible) {
         player.run(command, visible);
     }
@@ -308,7 +306,7 @@ public class IntegrationBase {
      * 
      * @param command
      */
-    @LuaMethod
+    
     public void sudo(String command) {
         sudo(command, true);
     }
@@ -319,7 +317,7 @@ public class IntegrationBase {
      * @param command
      * @param visible Set to false if output from the command shouldn't be sent back to the user
      */
-    @LuaMethod
+    
     public void sudo(String command, boolean visible) {
         player.sudo(command, visible);
     }
@@ -329,7 +327,7 @@ public class IntegrationBase {
      * 
      * @param message
      */
-    @LuaMethod
+    
     public void text(String message) {
         player.sendMessage(message);
     }

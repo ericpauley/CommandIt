@@ -1,4 +1,4 @@
-package org.zone.commandit.lua.integration;
+package org.zone.commandit.python.integration;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

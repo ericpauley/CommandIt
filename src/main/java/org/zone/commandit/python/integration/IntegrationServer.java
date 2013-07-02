@@ -1,10 +1,8 @@
-package org.zone.commandit.lua.integration;
+package org.zone.commandit.python.integration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.zone.commandit.handler.CommandBlockInteractEvent;
-
-import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class IntegrationServer {
     
@@ -20,7 +18,7 @@ public class IntegrationServer {
      * Broadcast a message to all players
      * @param message
      */
-    @LuaMethod
+    
     public void broadcast(String message) {
         server.broadcastMessage(message);
     }
@@ -29,7 +27,7 @@ public class IntegrationServer {
      * @param name
      * @return Player with the given name
      */
-    @LuaMethod
+    
     public IntegrationPlayer getPlayer(String name) {
         return new IntegrationPlayer(event);
     }
@@ -37,7 +35,7 @@ public class IntegrationServer {
     /**
      * @return List of all currently online players
      */
-    @LuaMethod
+    
     public IntegrationPlayer[] getPlayers() {
         IntegrationPlayer[] players = new IntegrationPlayer[server.getOnlinePlayers().length];
         for (int i = 0; i < players.length; i++) {
@@ -50,7 +48,7 @@ public class IntegrationServer {
      * Send command as console
      * @param command
      */
-    @LuaMethod
+    
     public void run(String command) {
         Bukkit.dispatchCommand(server.getConsoleSender(), command);
     }
@@ -58,7 +56,7 @@ public class IntegrationServer {
     /**
      * Shut the server down
      */
-    @LuaMethod
+    
     public void shutdown() {
         server.shutdown();
     }
