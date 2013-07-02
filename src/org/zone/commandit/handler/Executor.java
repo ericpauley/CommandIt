@@ -65,7 +65,7 @@ public class Executor {
     
     public boolean run() {
         try {
-			return PythonRunner.createRunner(code.toString()).run();
+			return PythonRunner.createRunner(code.toString(), "player", player).run();
 		} catch (IOException e) {
 			return false;
 		}
