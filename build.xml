@@ -42,6 +42,7 @@
 		</jar>
 		<JarOpt src="${bin}/CommandIt-tmp.jar" dst="${bin}/CommandIt.jar" stripNonClassFiles="false" verbose="false" printDependencies="false">
 			<includePattern>org.zone.commandit.*</includePattern>
+			<includePattern>org.python.*</includePattern>
 		</JarOpt  >
 		<delete file="jaropt.log" />
 	</target>
