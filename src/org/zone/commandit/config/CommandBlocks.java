@@ -6,9 +6,9 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.zone.commandit.io.DataAdapter;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 
-public class CommandBlocks implements Map<Location, LuaCode> {
+public class CommandBlocks implements Map<Location, PythonCode> {
     
     private DataAdapter adapter;
     
@@ -32,12 +32,12 @@ public class CommandBlocks implements Map<Location, LuaCode> {
     }
     
     @Override
-    public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
+    public Set<java.util.Map.Entry<Location, PythonCode>> entrySet() {
         return adapter.entrySet();
     }
     
     @Override
-    public LuaCode get(Object key) {
+    public PythonCode get(Object key) {
         return adapter.get(key);
     }
     
@@ -59,17 +59,17 @@ public class CommandBlocks implements Map<Location, LuaCode> {
     }
     
     @Override
-    public LuaCode put(Location key, LuaCode value) {
+    public PythonCode put(Location key, PythonCode value) {
         return adapter.put(key, value);
     }
     
     @Override
-    public void putAll(Map<? extends Location, ? extends LuaCode> m) {
+    public void putAll(Map<? extends Location, ? extends PythonCode> m) {
         adapter.putAll(m);
     }
     
     @Override
-    public LuaCode remove(Object key) {
+    public PythonCode remove(Object key) {
         return adapter.remove(key);
     }
     
@@ -86,7 +86,7 @@ public class CommandBlocks implements Map<Location, LuaCode> {
     }
     
     @Override
-    public Collection<LuaCode> values() {
+    public Collection<PythonCode> values() {
         return adapter.values();
     }
     

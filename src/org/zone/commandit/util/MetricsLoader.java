@@ -27,7 +27,7 @@ public class MetricsLoader {
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode code : plugin.getCommandBlocks().values()) {
+                    for (PythonCode code : plugin.getCommandBlocks().values()) {
                         if (code.toString().contains("run(")) {
                             number++;
                         }
@@ -40,7 +40,7 @@ public class MetricsLoader {
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode code : plugin.getCommandBlocks().values()) {
+                    for (PythonCode code : plugin.getCommandBlocks().values()) {
                         if (code.toString().contains("sudo(")) {
                             number++;
                         }
@@ -53,7 +53,7 @@ public class MetricsLoader {
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode code : plugin.getCommandBlocks().values()) {
+                    for (PythonCode code : plugin.getCommandBlocks().values()) {
                         if (code.toString().contains("op(")) {
                             number++;
                         }
@@ -66,7 +66,7 @@ public class MetricsLoader {
                 @Override
                 public int getValue() {
                     int number = 0;
-                    for (LuaCode code : plugin.getCommandBlocks().values()) {
+                    for (PythonCode code : plugin.getCommandBlocks().values()) {
                         if (code.toString().contains("console(")) {
                             number++;
                         }

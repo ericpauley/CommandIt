@@ -12,7 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 
 public class FileConverter extends FileAdapter {
     
@@ -29,12 +29,12 @@ public class FileConverter extends FileAdapter {
          * Load file as a normal YAML block file but with different keys
          */
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), filename));
-        Map<Location, LuaCode> loaded = new HashMap<Location, LuaCode>();
+        Map<Location, PythonCode> loaded = new HashMap<Location, PythonCode>();
         
         ConfigurationSection data = config.getConfigurationSection("signs");
         if (data == null) {
             plugin.getLogger().info("No CommandSigns found.");
-            cache = new HashMap<Location, LuaCode>();
+            cache = new HashMap<Location, PythonCode>();
         } else {
             String[] locText;
             World world;
@@ -67,7 +67,7 @@ public class FileConverter extends FileAdapter {
                     String owner = data.getString(key + ".owner", null);
                     
                     // Add code
-                    LuaCode code = new LuaCode(owner);
+                    PythonCode code = new PythonCode(owner);
                     for (Object o : data.getList(key + ".text", new ArrayList<String>())) {
                         code.addLine(o.toString());
                     }
@@ -105,7 +105,7 @@ public class FileConverter extends FileAdapter {
      *            LuaCode text to be converted to Lua
      * @return
      */
-    protected LuaCode convertToLua(LuaCode cst) {
+    protected PythonCode convertToLua(PythonCode cst) {
         int openblocks = 0;
         for (int line = 1; line <= cst.count(); line++) {
             // Convert line

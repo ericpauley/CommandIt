@@ -11,7 +11,7 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.LuaCode;
+import org.zone.commandit.util.PythonCode;
 
 public class SqlAdapter implements DataAdapter {
     
@@ -54,7 +54,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public Set<java.util.Map.Entry<Location, LuaCode>> entrySet() {
+    public Set<java.util.Map.Entry<Location, PythonCode>> entrySet() {
         if (connection == null)
             load();
         /*
@@ -66,7 +66,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public LuaCode get(Object key) {
+    public PythonCode get(Object key) {
         if (connection == null)
             load();
         /*
@@ -100,7 +100,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public LuaCode put(Location key, LuaCode value) {
+    public PythonCode put(Location key, PythonCode value) {
         if (connection == null)
             load();
         /*
@@ -114,14 +114,14 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public void putAll(Map<? extends Location, ? extends LuaCode> m) {
-        for (Entry<? extends Location, ? extends LuaCode> e : m.entrySet()) {
+    public void putAll(Map<? extends Location, ? extends PythonCode> m) {
+        for (Entry<? extends Location, ? extends PythonCode> e : m.entrySet()) {
             put(e.getKey(), e.getValue());
         }
     }
     
     @Override
-    public LuaCode remove(Object key) {
+    public PythonCode remove(Object key) {
         if (connection == null)
             load();
         /*
@@ -141,7 +141,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public Collection<LuaCode> values() {
+    public Collection<PythonCode> values() {
         if (connection == null)
             load();
         /*

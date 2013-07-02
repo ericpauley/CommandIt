@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class LuaCode implements Iterable<String> {
+public class PythonCode implements Iterable<String> {
     
     private boolean enabled = true;
     private String owner;
     private List<String> code;
     private Map<String, Long> timeouts = new HashMap<String, Long>();
     
-    public LuaCode(String owner) {
+    public PythonCode(String owner) {
         this.owner = owner;
         code = new ArrayList<String>();
     }
@@ -31,8 +31,8 @@ public class LuaCode implements Iterable<String> {
      * @param owner New owner
      * @return LuaCode instance with identical code, but optional new owner and no timeouts
      */
-    public LuaCode clone(String owner) {
-        LuaCode code = new LuaCode(owner);
+    public PythonCode clone(String owner) {
+        PythonCode code = new PythonCode(owner);
         for (String s : code) {
             code.getLines().add(s);
         }
@@ -145,6 +145,8 @@ public class LuaCode implements Iterable<String> {
     public String toString() {
         String string = "";
         for (String s : code) {
+        	if(!string.equals(""))
+        		string += "\n";
             string += s;
         }
         return string;
