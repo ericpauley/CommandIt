@@ -1,6 +1,7 @@
 package org.zone.commandit.python.util;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.python.core.PyBoolean;
 import org.python.util.PythonInterpreter;
@@ -23,6 +24,10 @@ public class PythonRunner {
     
     public void expose(String name, Object o) {
         interpreter.set(name, o);
+    }
+    
+    public void setOut(OutputStream os){
+    	interpreter.setOut(os);
     }
     
     public static PythonRunner createRunner(String code, Object... objects) throws IOException {

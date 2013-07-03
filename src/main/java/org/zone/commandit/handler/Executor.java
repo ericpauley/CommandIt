@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.python.integration.PrintAdapter;
 import org.zone.commandit.python.util.PythonRunner;
 import org.zone.commandit.util.PythonCode;
 
@@ -64,8 +65,13 @@ public class Executor {
     }
     
     public boolean run() {
+    	if(code == null){
+    		return false;
+    	}
         try {
-			return PythonRunner.createRunner(code.toString(), "player", player).run();
+			PythonRunner pr = PythonRunner.createRunner(code.toString(), "player", player);
+			pr.setOut(new PrintAdapter(player));
+			return pr.run();
 		} catch (IOException e) {
 			return false;
 		}
