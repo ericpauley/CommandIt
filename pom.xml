@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zone.commandit</groupId>
     <artifactId>CommandIt</artifactId>
-    <version>0.2</version>
+    <version>0.2.0-DEV</version>
     <name>CommandIt</name>
     <repositories>
         <repository>
@@ -45,6 +45,12 @@
 				</executions>
 			</plugin>
         </plugins>
+        <resources>
+        	<resource>
+        		<directory>src/main/resources</directory>
+        		<filtering>true</filtering>
+        	</resource>
+        </resources>
     </build>
     <dependencies>
         <dependency>

@@ -1,4 +1,4 @@
-config-version: "@VERSION@"
+config-version: "${project.version}"
 
 # If you prefer using a database over YAML, you can enable SQL support
 database:

@@ -1,4 +1,4 @@
-config-version: "@VERSION@"
+config-version: "${project.version}"
 prefix: "&4[CommandIt]&f "
 
 success:
