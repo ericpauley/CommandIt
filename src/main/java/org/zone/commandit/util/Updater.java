@@ -2,19 +2,22 @@ package org.zone.commandit.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.zone.commandit.CommandIt;
 
 public class Updater {
     
-    private static final String url = "http://dev.thechalkpot.com:8080/job/CommandIt/Release/artifact/bin/version.txt";
+    private static final String url = "http://api.bukget.org/3/plugins/bukkit/command-signs/latest?fields=versions.version,versions.link";
     
     public void init() {
         if (task == null && active) {
@@ -75,22 +78,32 @@ public class Updater {
             try {
                 source = new URL(url);
             } catch (MalformedURLException e) {
+                Message.warning("check_error", "the checking URL is malformed.");
                 return;
             }
             try {
-                Configuration c = YamlConfiguration.loadConfiguration(source.openStream());
-                Version available = Version.parse(c.getString("version"));
+                JSONParser parser = new JSONParser();
+                JSONObject json = (JSONObject) parser.parse(new InputStreamReader(source.openStream()));
+                
+                JSONArray versions = (JSONArray) json.get("versions");
+                JSONObject latest = (JSONObject) versions.get(0);
+                
+                Version available = Version.parse((String) latest.get("version"));
                 if (available.getBuild() > currentVersion.getBuild()) {
-                    if (auto) {
-                        installUpdate(plugin.getServer().getConsoleSender(), available, "http://dev.bukkit.org/media/files/" + c.getString("download"));
+                    /*if (auto) {
+                        installUpdate(plugin.getServer().getConsoleSender(), available, (String) latest.get("link"));
                         availableVersion = available;
                     } else {
                         availableVersion = available;
-                        toFetch = "http://dev.bukkit.org/media/files/" + c.getString("download");
-                    }
+                        toFetch = (String) latest.get("link");
+                    }*/
+                    availableVersion = available;
+                    toFetch = (String) latest.get("link");
                 }
-            } catch (IOException e) {
-                
+            } catch (IOException ex) {
+                Message.warning("check_error", "could not connect to plugin repository.");
+            } catch (ParseException e) {
+                Message.warning("check_error", "update data is not in the correct format.");
             }
         }
         
