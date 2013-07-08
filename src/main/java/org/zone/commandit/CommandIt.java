@@ -94,7 +94,7 @@ public class CommandIt extends JavaPlugin {
     public void load() {
         config.load();
         messages.load();
-        Message.init(this);
+        Message.init(this, messages);
         setupPermissions();
         setupEconomy();
         

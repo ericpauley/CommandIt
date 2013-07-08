@@ -1,8 +1,5 @@
 package org.zone.commandit.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,42 +7,30 @@ import org.zone.commandit.config.Messages;
 
 public class Message {
     
-    private static Messages messagesInstance;
+    private static Messages messages;
     private static JavaPlugin plugin;
     
-    public static void init(JavaPlugin plugin) {
+    public static void init(JavaPlugin plugin, Messages messages) {
         Message.plugin = plugin;
-    }
-    
-    private static Messages getMessagesInstance() {
-        if (messagesInstance == null) {
-            messagesInstance = new Messages(plugin);
-        }
-        return messagesInstance;
+        Message.messages = messages;
     }
     
     public static String parseMessage(String message, Object... replacements) {
-        Messages messages = getMessagesInstance();
         String raw = parseRaw(message, replacements);
         String prefix = messages.get("prefix");
-        if (prefix != null) {
-            return ChatColor.translateAlternateColorCodes('&', prefix + raw);
-        } else {
-            return "Could not find message " + prefix + ".";
-        }
+        
+        return ChatColor.translateAlternateColorCodes('&', ((prefix != null) ? prefix : "") + raw);
     }
     
     public static String parseRaw(String messageName, Object... replacements) {
-        Messages messages = getMessagesInstance();
         messageName = messageName.toLowerCase();
         String prefix = messages.get(messageName.split("\\.")[0] + ".prefix");
         String raw = messages.get(messageName);
         if (raw != null) {
-            List<String> tags = new ArrayList<String>();
-            for (int i = 0; i < replacements.length; i++) {
-                raw = raw.replaceAll("(?iu)\\{" + tags.get(i) + "\\}", replacements[i].toString());
-            }
             raw = raw.replaceAll("(?iu)\\{PREFIX\\}", ((prefix != null) ? prefix : ""));
+            for (int i = 0; i < replacements.length; i++) {
+                raw = raw.replaceFirst("(?iu)\\{[A-Z]+\\}", replacements[i].toString());
+            }
             return ChatColor.translateAlternateColorCodes('&', ((prefix != null) ? prefix : "") + raw);
         } else {
             return "Could not find message " + messageName + ".";
