@@ -1,4 +1,4 @@
-package org.zone.commandit.python.integration;
+package org.zone.commandit.code.integration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;

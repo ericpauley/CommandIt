@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.exception.CodeException;
 import org.zone.commandit.util.PythonCode;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
@@ -137,11 +138,23 @@ public class ClickHandler {
                  * BATCH_REDSTONE: redstoneToggle(true); break;
                  */
                 default:
-                    return new Executor(plugin, player, location, action).run();
+                    try {
+                        new Executor(plugin, player, location, action).run();
+                        return true;
+                    } catch (CodeException ex) {
+                        Message.warning(ex.getMessage());
+                        return false;
+                    }
             }
             return true;
         } else {
-            return new Executor(plugin, player, location, action).run();
+            try {
+                new Executor(plugin, player, location, action).run();
+                return true;
+            } catch (CodeException ex) {
+                Message.warning(ex.getMessage());
+                return false;
+            }
         }
     }
     

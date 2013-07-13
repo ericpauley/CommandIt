@@ -1,17 +1,16 @@
 package org.zone.commandit.handler;
 
-import java.io.IOException;
 import java.util.Stack;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.python.integration.PrintAdapter;
-import org.zone.commandit.python.util.PythonRunner;
+import org.zone.commandit.code.integration.PrintAdapter;
+import org.zone.commandit.code.python.PythonRunner;
 import org.zone.commandit.util.PythonCode;
 
-public class Executor {
+public class Executor implements Runnable {
     
     private final Action action;
     boolean isValid = false;
@@ -64,17 +63,13 @@ public class Executor {
         return wait;
     }
     
-    public boolean run() {
+    public void run() {
     	if(code == null){
-    		return false;
+    		return;
     	}
-        try {
-			PythonRunner pr = PythonRunner.createRunner(code.toString(), "player", player);
-			pr.setOut(new PrintAdapter(player));
-			return pr.run();
-		} catch (IOException e) {
-			return false;
-		}
+    	
+		PythonRunner pr = PythonRunner.createRunner(code.toString(), "player", player);
+		pr.setOut(new PrintAdapter(player));
     }
     
     public void setWait(double wait) {
