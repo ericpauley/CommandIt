@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class PythonCode implements Iterable<String> {
+public class Code implements Iterable<String> {
     
     private boolean enabled = true;
     private String owner;
     private List<String> code;
     private Map<String, Long> timeouts = new HashMap<String, Long>();
     
-    public PythonCode(String owner) {
+    public Code(String owner) {
         this.owner = owner;
         code = new ArrayList<String>();
     }
@@ -31,8 +31,8 @@ public class PythonCode implements Iterable<String> {
      * @param owner New owner
      * @return LuaCode instance with identical code, but optional new owner and no timeouts
      */
-    public PythonCode clone(String owner) {
-        PythonCode code = new PythonCode(owner);
+    public Code clone(String owner) {
+        Code code = new Code(owner);
         for (String s : code) {
             code.getLines().add(s);
         }

@@ -11,7 +11,7 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.PythonCode;
+import org.zone.commandit.util.Code;
 
 public class SqlAdapter implements DataAdapter {
     
@@ -54,7 +54,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public Set<java.util.Map.Entry<Location, PythonCode>> entrySet() {
+    public Set<java.util.Map.Entry<Location, Code>> entrySet() {
         if (connection == null)
             load();
         /*
@@ -66,7 +66,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public PythonCode get(Object key) {
+    public Code get(Object key) {
         if (connection == null)
             load();
         /*
@@ -100,7 +100,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public PythonCode put(Location key, PythonCode value) {
+    public Code put(Location key, Code value) {
         if (connection == null)
             load();
         /*
@@ -114,14 +114,14 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public void putAll(Map<? extends Location, ? extends PythonCode> m) {
-        for (Entry<? extends Location, ? extends PythonCode> e : m.entrySet()) {
+    public void putAll(Map<? extends Location, ? extends Code> m) {
+        for (Entry<? extends Location, ? extends Code> e : m.entrySet()) {
             put(e.getKey(), e.getValue());
         }
     }
     
     @Override
-    public PythonCode remove(Object key) {
+    public Code remove(Object key) {
         if (connection == null)
             load();
         /*
@@ -141,7 +141,7 @@ public class SqlAdapter implements DataAdapter {
     }
     
     @Override
-    public Collection<PythonCode> values() {
+    public Collection<Code> values() {
         if (connection == null)
             load();
         /*

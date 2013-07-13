@@ -6,9 +6,9 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.zone.commandit.io.DataAdapter;
-import org.zone.commandit.util.PythonCode;
+import org.zone.commandit.util.Code;
 
-public class CommandBlocks implements Map<Location, PythonCode> {
+public class CommandBlocks implements Map<Location, Code> {
     
     private DataAdapter adapter;
     
@@ -32,12 +32,12 @@ public class CommandBlocks implements Map<Location, PythonCode> {
     }
     
     @Override
-    public Set<java.util.Map.Entry<Location, PythonCode>> entrySet() {
+    public Set<java.util.Map.Entry<Location, Code>> entrySet() {
         return adapter.entrySet();
     }
     
     @Override
-    public PythonCode get(Object key) {
+    public Code get(Object key) {
         return adapter.get(key);
     }
     
@@ -59,17 +59,17 @@ public class CommandBlocks implements Map<Location, PythonCode> {
     }
     
     @Override
-    public PythonCode put(Location key, PythonCode value) {
+    public Code put(Location key, Code value) {
         return adapter.put(key, value);
     }
     
     @Override
-    public void putAll(Map<? extends Location, ? extends PythonCode> m) {
+    public void putAll(Map<? extends Location, ? extends Code> m) {
         adapter.putAll(m);
     }
     
     @Override
-    public PythonCode remove(Object key) {
+    public Code remove(Object key) {
         return adapter.remove(key);
     }
     
@@ -86,7 +86,7 @@ public class CommandBlocks implements Map<Location, PythonCode> {
     }
     
     @Override
-    public Collection<PythonCode> values() {
+    public Collection<Code> values() {
         return adapter.values();
     }
     

@@ -8,7 +8,7 @@ import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
 import org.zone.commandit.code.integration.PrintAdapter;
 import org.zone.commandit.code.python.PythonRunner;
-import org.zone.commandit.util.PythonCode;
+import org.zone.commandit.util.Code;
 
 public class Executor implements Runnable {
     
@@ -23,7 +23,7 @@ public class Executor implements Runnable {
     
     private final Stack<Boolean> restrictions = new Stack<Boolean>();
     
-    private final PythonCode code;
+    private final Code code;
     
     private double wait;
     
@@ -55,7 +55,7 @@ public class Executor implements Runnable {
         return restrictions;
     }
     
-    public PythonCode getCode() {
+    public Code getCode() {
         return code;
     }
     

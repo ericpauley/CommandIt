@@ -15,12 +15,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.zone.commandit.CommandIt;
-import org.zone.commandit.util.PythonCode;
+import org.zone.commandit.util.Code;
 
 public class FileAdapter implements DataAdapter {
     
     protected CommandIt plugin;
-    protected Map<Location, PythonCode> cache;
+    protected Map<Location, Code> cache;
     protected String filename;
     
     public FileAdapter(CommandIt plugin, String filename) {
@@ -50,14 +50,14 @@ public class FileAdapter implements DataAdapter {
     }
     
     @Override
-    public Set<java.util.Map.Entry<Location, PythonCode>> entrySet() {
+    public Set<java.util.Map.Entry<Location, Code>> entrySet() {
         if (cache == null)
             load();
         return cache.entrySet();
     }
     
     @Override
-    public PythonCode get(Object key) {
+    public Code get(Object key) {
         if (cache == null)
             load();
         return cache.get(key);
@@ -78,21 +78,21 @@ public class FileAdapter implements DataAdapter {
     }
     
     @Override
-    public PythonCode put(Location key, PythonCode value) {
+    public Code put(Location key, Code value) {
         if (cache == null)
             load();
         return cache.put(key, value);
     }
     
     @Override
-    public void putAll(Map<? extends Location, ? extends PythonCode> m) {
+    public void putAll(Map<? extends Location, ? extends Code> m) {
         if (cache == null)
             load();
         cache.putAll(m);
     }
     
     @Override
-    public PythonCode remove(Object key) {
+    public Code remove(Object key) {
         if (cache == null)
             load();
         return cache.remove(key);
@@ -106,7 +106,7 @@ public class FileAdapter implements DataAdapter {
     }
     
     @Override
-    public Collection<PythonCode> values() {
+    public Collection<Code> values() {
         if (cache == null)
             load();
         return cache.values();
@@ -115,12 +115,12 @@ public class FileAdapter implements DataAdapter {
     @Override
     public void load() {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), filename));
-        Map<Location, PythonCode> loaded = new HashMap<Location, PythonCode>();
+        Map<Location, Code> loaded = new HashMap<Location, Code>();
         
         ConfigurationSection data = config.getConfigurationSection("blocks");
         if (data == null) {
             plugin.getLogger().info("No command blocks found.");
-            cache = new HashMap<Location, PythonCode>();
+            cache = new HashMap<Location, Code>();
         } else {
             String[] locText;
             World world;
@@ -152,7 +152,7 @@ public class FileAdapter implements DataAdapter {
                     // Get attributes
                     String owner = data.getString(key + ".owner", null);
                     
-                    PythonCode code = new PythonCode(owner);
+                    Code code = new Code(owner);
                     for (Object o : data.getList(key + ".code", new ArrayList<String>())) {
                         code.addLine(o.toString());
                     }
@@ -184,9 +184,9 @@ public class FileAdapter implements DataAdapter {
         FileConfiguration config = new YamlConfiguration();
         ConfigurationSection data = config.createSection("blocks");
         
-        for (Map.Entry<Location, PythonCode> entry : cache.entrySet()) {
+        for (Map.Entry<Location, Code> entry : cache.entrySet()) {
             Location loc = entry.getKey();
-            PythonCode code = entry.getValue();
+            Code code = entry.getValue();
             code.trim();
             
             String key = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();

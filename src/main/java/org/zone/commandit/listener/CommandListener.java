@@ -13,7 +13,7 @@ import org.zone.commandit.config.CommandBlocks;
 import org.zone.commandit.io.FileAdapter;
 import org.zone.commandit.io.FileConverter;
 import org.zone.commandit.io.SqlAdapter;
-import org.zone.commandit.util.PythonCode;
+import org.zone.commandit.util.Code;
 import org.zone.commandit.util.Message;
 import org.zone.commandit.util.PlayerState;
 
@@ -120,9 +120,9 @@ public class CommandListener implements CommandExecutor {
             if (plugin.getPlayerStates().get(player) == PlayerState.EDIT_SELECT) {
                 Message.sendMessage(player, "failure.must_select");
             }
-            PythonCode text = plugin.getPlayerCode().get(player);
+            Code text = plugin.getPlayerCode().get(player);
             if (text == null) {
-                text = new PythonCode(player.getName());
+                text = new Code(player.getName());
                 plugin.getPlayerCode().put(player, text);
             }
             String line = StringUtils.join(args, " ", textStart, args.length);
@@ -373,7 +373,7 @@ public class CommandListener implements CommandExecutor {
             Message.sendMessage(sender, "failure.player_only");
         }
         if (plugin.hasPermission(player, "commandit.create.regular")) {
-            PythonCode text = plugin.getPlayerCode().get(player);
+            Code text = plugin.getPlayerCode().get(player);
             if (text == null) {
                 player.sendMessage("No text in clipboard");
             } else {
