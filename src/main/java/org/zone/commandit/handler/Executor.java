@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.zone.commandit.CommandIt;
+import org.zone.commandit.code.CodeRunner;
 import org.zone.commandit.code.integration.PrintAdapter;
 import org.zone.commandit.code.python.PythonRunner;
 import org.zone.commandit.util.Code;
@@ -68,8 +69,9 @@ public class Executor implements Runnable {
     		return;
     	}
     	
-		PythonRunner pr = PythonRunner.createRunner(code.toString(), "player", player);
+		CodeRunner pr = PythonRunner.createRunner(code.toString(), "player", player);
 		pr.setOut(new PrintAdapter(player));
+		pr.run();
     }
     
     public void setWait(double wait) {
