@@ -13,6 +13,10 @@
 			<id>milkbowl-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
 		</repository>
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net</url>
+        </repository>
     </repositories>
     <build>
 		<plugins>
@@ -56,7 +60,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.5.2-R1.0</version>
+            <version>1.7.2-R0.2</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -67,6 +71,11 @@
             <type>jar</type>
             <scope>provided</scope>
 		</dependency>
+		<dependency>
+            <groupId>net.gravitydevelopment.updater</groupId>
+            <artifactId>updater</artifactId>
+            <version>2.1</version>
+        </dependency>
 		<dependency>
 			<groupId>org.python</groupId>
 			<artifactId>jython-standalone</artifactId>
