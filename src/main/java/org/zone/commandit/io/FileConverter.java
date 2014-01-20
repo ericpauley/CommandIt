@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -38,7 +39,8 @@ public class FileConverter extends FileAdapter {
         } else {
             String[] locText;
             World world;
-            int x, y, z, block;
+            int x, y, z;
+            Material block;
             Location loc;
             int attempts = 0;
             
@@ -59,22 +61,22 @@ public class FileConverter extends FileAdapter {
                     
                     // Throws exception for an invalid location AND if the
                     // location is air
-                    block = loc.getBlock().getTypeId();
-                    if (block == 0)
-                        throw new IllegalArgumentException("Location not valid: " + loc.toString() + ".");
+                    block = loc.getBlock().getType();
+                    if (block == null || block == Material.AIR)
+                        throw new IllegalArgumentException(
+                                "Location not valid.");
                     
                     // Get attributes
                     String owner = data.getString(key + ".owner", null);
                     
-                    // Add code
                     Code code = new Code(owner);
-                    for (Object o : data.getList(key + ".text", new ArrayList<String>())) {
+                    for (Object o : data.getList(key + ".code", new ArrayList<String>())) {
                         code.addLine(o.toString());
                     }
                     
                     code.setEnabled(data.getBoolean(key + ".active", true));
                     
-                    // Cooldowns as Player --> Expiry (UNIX timestamp)
+                    // Cooldowns as Player => Expiry (UNIX timestamp)
                     Map<String, Long> timeouts = code.getTimeouts();
                     ConfigurationSection cooldowns = data.getConfigurationSection(key + ".cooldowns");
                     if (cooldowns == null) {
@@ -92,7 +94,6 @@ public class FileConverter extends FileAdapter {
                     plugin.getLogger().warning("Unable to load CommandSign " + attempts + ".\n" + ex.getMessage());
                 }
             }
-            
             cache = loaded;
             plugin.getLogger().info("Successfully loaded " + cache.size() + " old CommandSigns");
         }
