@@ -3,6 +3,8 @@ package org.zone.commandit.listener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.gravitydevelopment.updater.Updater;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -364,7 +366,46 @@ public class CommandListener implements CommandExecutor {
     }
     
     protected boolean update(final CommandSender sender, Player player, String[] args) {
-        // TODO: Write the update method...
+        if (plugin.hasPermission(sender, "commandit.update")) {
+            Updater updater = plugin.getUpdater();
+            
+            if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                Message.sendMessage(player, "update.start");
+                double time = System.currentTimeMillis();
+                Updater.UpdateResult result = new Updater(plugin, plugin.getBukkitId(), plugin.getFile(), Updater.UpdateType.NO_VERSION_CHECK, false).getResult();
+                switch(result) {
+                    case SUCCESS:
+                        Message.sendMessage(player, "update.finish", updater.getLatestGameVersion(), (System.currentTimeMillis() - time) / 1000);
+                        break;
+                    case NO_UPDATE:
+                        Message.sendMessage(player, "update.fetch_error", "there was no update found.");
+                        break;
+                    case DISABLED:
+                        Message.sendMessage(player, "update.fetch_error", "updater is disabled in configuration (plugins/Updater/config.yml).");
+                        break;
+                    case FAIL_DOWNLOAD:
+                        Message.sendMessage(player, "update.fetch_error", "failed to download.");
+                        break;
+                    case FAIL_DBO:
+                        Message.sendMessage(player, "update.fetch_error", "unable to contact Bukkit Dev at this time.");
+                        break;
+                    case FAIL_NOVERSION:
+                        Message.sendMessage(player, "update.fetch_error", "unable to check latest version.");
+                        break;
+                    case FAIL_BADID:
+                        Message.sendMessage(player, "update.fetch_error", "the plugin was not found on Bukkit Dev!");
+                        break;
+                    case FAIL_APIKEY:
+                        Message.sendMessage(player, "update.fetch_error", "the API key provided is invalid (plugins/Updater/config.yml).");
+                        break;
+                    default:
+                        Message.sendMessage(player, "update.fetch_error", "I have no idea what just happened.");
+                        break;
+                }
+            } else {
+                Message.sendMessage(player, "update.up_to_date", updater.getLatestGameVersion());
+            }
+        }
         return true;
     }
     

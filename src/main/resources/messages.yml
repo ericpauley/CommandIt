@@ -54,16 +54,11 @@ restriction:
   
 update:
   prefix: "&e"
-  start: "Updating CommandIt to version &5{VERSION}{PREFIX}..."
-  finish: "Downloaded version &5{VERSION}{PREFIX} in &5{TIME}{PREFIX} seconds. To complete the update, restart/reload your server."
+  start: "Updating to &5{VERSION}{PREFIX}..."
+  finish: "Downloaded &5{VERSION}{PREFIX} in &5{TIME}{PREFIX} seconds. To complete the update, restart/reload your server."
   already_downloaded: "An update to CommandIt is already waiting to be installed on reload/restart."
   up_to_date: "CommandIt is already up to date. (&5{VERSION}{PREFIX})"
-  confirm_up_to_date: "CommandIt is up to date. (&5{VERSION}{PREFIX})"
-  notify: "CommandIt  version &5{VERSION}{PREFIX} is available. You can update your install with &5/cmdit update{PREFIX}."
   fetch_error: "Error fetching update - {ERROR}"
-  check_error: "Error checking for updates - {ERROR}"
-  check: "Checking for latest version..."
-  force: "Force updating CommandIt to latest version..."
     
 metrics:
   success: "Plugin metrics enabled! Thank you!"

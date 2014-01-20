@@ -1,8 +1,10 @@
 package org.zone.commandit;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.gravitydevelopment.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -11,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.zone.commandit.config.CommandBlocks;
 import org.zone.commandit.config.Config;
 import org.zone.commandit.config.Messages;
@@ -25,7 +26,6 @@ import org.zone.commandit.util.Message;
 import org.zone.commandit.util.MetricsLoader;
 import org.zone.commandit.util.PlayerState;
 import org.zone.commandit.util.Code;
-import org.zone.commandit.util.Updater;
 
 public class CommandIt extends JavaPlugin {
     
@@ -35,6 +35,7 @@ public class CommandIt extends JavaPlugin {
     
     // Third-party
     public Metrics metrics;
+    private final int bukkitId = 50682;
     
     private Economy economy;
     private Permission permission;
@@ -47,9 +48,6 @@ public class CommandIt extends JavaPlugin {
     private Config config = new Config(this);
     private Messages messages = new Messages(this);
     private Updater updater;
-    
-    // Class variables
-    private BukkitTask updateTask;
     
     /**
      * Complements Vault to finding whether a player has a given permission
@@ -99,17 +97,16 @@ public class CommandIt extends JavaPlugin {
         setupEconomy();
         
         DataAdapter adapter;
-        if (config.getBoolean("sql.enabled"))
+        if (config.getBoolean("sql.enable"))
             adapter = new SqlAdapter(this);
         else
             adapter = new FileAdapter(this, "blocks.yml");
         
         blocks = new CommandBlocks(adapter);
         blocks.load();
-        
-        updater = new Updater(this, this.getFile());
+
         if (config.getBoolean("updater.auto-check") == true)
-            updater.init();
+            updater = new Updater(this, getBukkitId(), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
         
         if (config.getBoolean("metrics.enable") == true)
             MetricsLoader.factory(this);
@@ -119,9 +116,6 @@ public class CommandIt extends JavaPlugin {
     
     @Override
     public void onDisable() {
-        if (updateTask != null)
-            updateTask.cancel();
-        
         blocks.save();
     }
     
@@ -167,10 +161,22 @@ public class CommandIt extends JavaPlugin {
     }
     
     /**
+     * @return Plugin's Bukkit ID number
+     */
+    public int getBukkitId() {
+        return bukkitId;
+    }
+    
+    /**
      * @return Handler for the updater system
      */
     public Updater getUpdater() {
         return updater;
+    }
+    
+    @Override
+    public File getFile() {
+        return super.getFile();
     }
     
     /**

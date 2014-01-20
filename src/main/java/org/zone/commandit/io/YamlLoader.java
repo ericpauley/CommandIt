@@ -2,12 +2,12 @@ package org.zone.commandit.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.zone.commandit.util.Updater.Version;
 
 public class YamlLoader {
     
@@ -22,7 +22,7 @@ public class YamlLoader {
         File f = new File(plugin.getDataFolder(), filename);
         
         // Load the included file
-        FileConfiguration included = YamlConfiguration.loadConfiguration(plugin.getResource(filename));
+        FileConfiguration internal = YamlConfiguration.loadConfiguration(plugin.getResource(filename));
         
         // Write the included file if an external one doesn't exist
         if (!f.exists()) {
@@ -33,30 +33,29 @@ public class YamlLoader {
         // Load the external file
         Configuration external = YamlConfiguration.loadConfiguration(f);
         
-        // Check version information
-        Version extVersion = Version.parse(external.getString("config-version"));
-        Version incVersion = Version.parse(included.getString("config-version"));
+        // Check file for changes
+        Set<String> internalKeys = internal.getKeys(true);
+        Set<String> externalKeys = external.getKeys(true);
         
-        // Update external file if included file is newer
-        if (incVersion.getBuild() > extVersion.getBuild() || incVersion.getBuild() == 0) {
+        if (!internalKeys.equals(externalKeys)) {
             plugin.getLogger().info("Updating " + filename + ".");
             
-            // Copy all the loaded configuration into the new included format
-            for (String k : external.getKeys(true)) {
-                if (external.isString(k) && included.contains(k) && !k.equals("config-version")) {
-                    included.set(k, external.getString(k));
+            // Copy all the loaded configuration into the new internal format
+            for (String k : externalKeys) {
+                if (external.isString(k) && internal.contains(k)) {
+                    internal.set(k, external.getString(k));
                 }
             }
             
             // Write the file to disk
             try {
-                included.save(f);
+                internal.save(f);
             } catch (IOException e) {
                 plugin.getLogger().info("Could not update " + filename + ".");
             }
             
             // Copy the new configuration back into external
-            external = included;
+            external = internal;
         }
         
         return external;

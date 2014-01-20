@@ -1,5 +1,7 @@
 package org.zone.commandit.listener;
 
+import net.gravitydevelopment.updater.Updater;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -12,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.zone.commandit.CommandIt;
 import org.zone.commandit.handler.ClickHandler;
 import org.zone.commandit.util.Message;
-import org.zone.commandit.util.Updater;
 
 public class EventListener implements Listener {
     
@@ -57,10 +58,10 @@ public class EventListener implements Listener {
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (plugin.hasPermission(event.getPlayer(), "CommandIt.update", false)) {
+        if (plugin.hasPermission(event.getPlayer(), "commandit.update", false)) {
             Updater u = plugin.getUpdater();
-            if (u.getAvailableVersion().getBuild() > u.getCurrentVersion().getBuild()) {
-                Message.sendMessage(event.getPlayer(), "update.notify", u.getAvailableVersion().toString());
+            if (u.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                Message.sendMessage(event.getPlayer(), "update.notify", u.getLatestGameVersion());
             }
         }
     }
