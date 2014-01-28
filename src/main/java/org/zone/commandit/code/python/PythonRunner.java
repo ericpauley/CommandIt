@@ -17,7 +17,6 @@ public class PythonRunner implements CodeRunner {
     
     @Override
     public void run() {
-    	interpreter.set("success", true);
         interpreter.exec(code);
     }
     
