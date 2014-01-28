@@ -105,8 +105,12 @@ public class CommandIt extends JavaPlugin {
         blocks = new CommandBlocks(adapter);
         blocks.load();
 
-        if (config.getBoolean("updater.auto-check") == true)
-            updater = new Updater(this, getBukkitId(), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+        if (config.getBoolean("updater.auto-check") == true) {
+            if (config.getBoolean("updater.auto-install") == true)
+                updater = new Updater(this, getBukkitId(), this.getFile(), Updater.UpdateType.DEFAULT, false);
+            else
+                updater = new Updater(this, getBukkitId(), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+        }
         
         if (config.getBoolean("metrics.enable") == true)
             MetricsLoader.factory(this);

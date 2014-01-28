@@ -102,7 +102,7 @@ permissions:
     commandit.create.sudo:
         description: Allows you to create a super command block
         default: false
-    commandisgns.create.op:
+    commandit.create.op:
         description: Allows you to create op-level CommandIt
         default: false
     commandit.create.redstone:

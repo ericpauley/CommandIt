@@ -1,5 +1,3 @@
-config-version: "${project.version}"
-
 # If you prefer using a database over YAML, you can enable SQL support
 database:
   enable: false
@@ -25,7 +23,7 @@ database:
 # For updating the plugin automatically
 updater:
   auto-check: true
-  auto-install: true
+  auto-install: false
 
 # For sending anonymous usage data to us for future improvements
 metrics:
